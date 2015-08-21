@@ -1,7 +1,8 @@
 import os
 import argparse
 import logging
-logging.basicConfig(level=logging.DEBUG)
+
+from tools.tsv_reader import TsvReader
 
 _FILE_TYPES = ['.tsv']
 
@@ -41,8 +42,10 @@ class GritsConsumer(object):
     
     def run(self):
         args = self.get_args()
-        file = args.infile
-        if not self.is_valid_file_type(file):
+        if not self.is_valid_file_type(args.infile):
             msg = 'not a valid file type %r' % _FILE_TYPES
-            self.parser.error(msg)
+            self.parser.error(msg) #this calls sys.exit
+        tsvReader = TsvReader(args)
+        
         logging.debug('args:%r', args)
+        

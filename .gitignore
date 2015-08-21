@@ -10,5 +10,4 @@ downloads
 eggs
 parts
 src/*.egg-info
-lib
-lib64
+grits-net-consume-env

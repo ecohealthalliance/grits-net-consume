@@ -1,6 +1,4 @@
 import unittest
-import vendor
-vendor.add('lib')
 
 import test.suites.program
 

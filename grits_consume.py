@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import vendor
-vendor.add('lib')
 
 from tools.grits_consumers import GritsConsumer
 

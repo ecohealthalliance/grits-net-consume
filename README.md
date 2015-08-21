@@ -17,7 +17,7 @@ MongoDB with geospatial indexing.
   ``` pip install -r requirements.txt```
 
 ## test
-  ``` python runner.py ```
+  ``` nosetests ```
 
 ## run
   ``` python grits_consume.py test/data/Schedule_Weekly_Extract_Report.tsv ```

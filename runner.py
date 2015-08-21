@@ -1,8 +1,8 @@
 import unittest
 
-import test.suites.program
+import tests.suites.program
 
-test_modules = [test.suites.program]
+test_modules = [tests.suites.program]
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()

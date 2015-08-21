@@ -46,7 +46,3 @@ class GritsConsumer(object):
             msg = 'not a valid file type %r' % _FILE_TYPES
             self.parser.error(msg)
         logging.debug('args:%r', args)
-
-if __name__ == '__main__':
-    cmd = GritsConsumer()
-    cmd.run()

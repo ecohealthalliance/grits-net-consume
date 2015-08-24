@@ -21,15 +21,15 @@ class GritsConsumer(object):
             'a mongodb collection.')
     
     @staticmethod
-    def file_extension(file):
-        parts = os.path.splitext(file.name)
+    def file_extension(file_obj):
+        parts = os.path.splitext(file_obj.name)
         ext = ''
         if len(parts) > 1:
             ext = parts[-1].lower()
         return ext
     
-    def is_valid_file_type(self, file):
-        ext = GritsConsumer.file_extension(file)
+    def is_valid_file_type(self, file_obj):
+        ext = GritsConsumer.file_extension(file_obj)
         if ext not in _FILE_TYPES:
             return False
         return True
@@ -55,11 +55,11 @@ class GritsConsumer(object):
             self.parser.error(msg) #this calls sys.exit
         
         if args.type == 'airport':
-            type = AirportType()
+            report_type = AirportType()
         else :
-            type = ExtractType()
+            report_type = ExtractType()
             
-        reader = GritsFileReader(type, args)
+        reader = GritsFileReader(report_type, args)
         reader.process_file()
         
         logging.info('records: %d', len(reader.records))

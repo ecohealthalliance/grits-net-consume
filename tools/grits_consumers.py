@@ -1,10 +1,15 @@
 import os
 import argparse
 import logging
+logging.getLogger().setLevel(logging.DEBUG)
 
-from tools.tsv_reader import TsvReader
+from tools.grits_file_reader import GritsFileReader
+from tools.grits_record import AirportType, ExtractType
+
 
 _FILE_TYPES = ['.tsv']
+_TYPES = ['airport', 'extract']
+
 
 class GritsConsumer(object):
     """ Command line tool to parse grits transportation network data """
@@ -34,6 +39,9 @@ class GritsConsumer(object):
             action="store_true",
             help="verbose output" )
         
+        self.parser.add_argument('-t', '--type', required=True,
+            choices=_TYPES)
+        
         self.parser.add_argument('infile',
             type=argparse.FileType('r'),
             help="file to be parsed")
@@ -45,7 +53,14 @@ class GritsConsumer(object):
         if not self.is_valid_file_type(args.infile):
             msg = 'not a valid file type %r' % _FILE_TYPES
             self.parser.error(msg) #this calls sys.exit
-        tsvReader = TsvReader(args)
         
-        logging.debug('args:%r', args)
+        if args.type == 'airport':
+            type = AirportType()
+        else :
+            type = ExtractType()
+            
+        reader = GritsFileReader(type, args)
+        reader.process_file()
         
+        logging.info('records: %d', len(reader.records))
+        logging.info('args:%r', args)

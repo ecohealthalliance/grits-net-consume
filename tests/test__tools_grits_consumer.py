@@ -2,7 +2,6 @@ import os
 import unittest
 
 from tools.grits_consumers import GritsConsumer
-from tools.grits_file_reader import InvalidFileFormat
 
 _SCRIPT_DIR = os.path.dirname(__file__)
 

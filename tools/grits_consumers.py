@@ -4,11 +4,11 @@ import logging
 logging.getLogger().setLevel(logging.DEBUG)
 
 from tools.grits_file_reader import GritsFileReader
-from tools.grits_record import AirportType, ExtractType
+from tools.grits_record import AirportType, FlightType
 
 
 _FILE_TYPES = ['.tsv']
-_TYPES = ['airport', 'extract']
+_TYPES = ['airport', 'flight']
 
 
 class GritsConsumer(object):
@@ -57,7 +57,7 @@ class GritsConsumer(object):
         if args.type == 'airport':
             report_type = AirportType()
         else :
-            report_type = ExtractType()
+            report_type = FlightType()
             
         reader = GritsFileReader(report_type, args)
         reader.process_file()

@@ -10,8 +10,8 @@ class InvalidFileFormat(Exception):
         super(InvalidFileFormat, self).__init__(message)
 
 class GritsFileReader:
-    def __init__(self, recordType, arguments):
-        self.type= recordType
+    def __init__(self, record_type, arguments):
+        self.type= record_type
         self.arguments = arguments
         self.records = set() #collection of records
         self.empty_row_count = 0 # number of empty rows encountered within record set

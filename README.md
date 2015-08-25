@@ -24,5 +24,5 @@ MongoDB with geospatial indexing.
 1. Upsert airport data
   ``` python grits_consume.py --type airport test/data/MiExpressAllAirportCodes.tsv ```
 
-2. Upsert extration report data
-  ``` python grits_consume.py --type extract test/data/Schedule_Weekly_Extract_Report.tsv ```
+2. Upsert flight extraction report data
+  ``` python grits_consume.py --type flight test/data/Schedule_Weekly_Extract_Report.tsv ```

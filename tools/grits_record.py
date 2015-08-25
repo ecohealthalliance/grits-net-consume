@@ -1,17 +1,42 @@
 import functools
 import json
 import collections
+import logging
 
 from csv_helpers import TabDialect
 
+class InvalidRecordProperty(Exception):
+    """ custom exception that is thrown when the record is missing required
+    properties """
+    def __init__(self, message, *args, **kwargs):
+        super(InvalidRecordProperty, self).__init__(message)
+
+class InvalidRecordLength(Exception):
+    """ custom exception that is thrown when the data to be inserted into the
+    record does not match the header length """
+    def __init__(self, message, *args, **kwargs):
+        super(InvalidRecordLength, self).__init__(message)
 
 class Record(object):
     """ base record class """
     
     def __init__(self):
-        pass
+        self.fields = collections.OrderedDict()
+        self.required = [] #optional
     
     def create(self, row):
+        """ populate the fields with the row data """
+        
+        if not 'headers' in self.__dict__:
+            raise InvalidRecordProperty('Record is missing "headers" property')
+        if self.headers == None:
+            raise InvalidRecordProperty('Record "headers" property is None')
+        
+        header_len = len(self.headers)
+        field_len = len(row)
+        if header_len != field_len:
+            raise InvalidRecordLength('Record length does not equal header')
+        
         position= 0
         for field in row:
             self.fields[self.headers[position]] = field
@@ -19,6 +44,15 @@ class Record(object):
     
     def validate_required(self):
         """ the record must contain valid keys that are not None """
+        
+        field_len = len(self.fields)
+        if field_len == 0:
+            raise InvalidRecordLength('Record is empty')
+        
+        required_len = len(self.required)
+        if required_len == 0:
+            return True
+        
         valid = {}
         for required in self.required:
             if required in self.fields:
@@ -69,10 +103,9 @@ class FlightRecord(Record):
     """
     
     def __init__(self, headers):
-        self.headers = headers
-        self.fields = collections.OrderedDict()
-        self.required = ["Date", "Alliance", "Orig", "Dest", "Flight"]
         super(FlightRecord, self).__init__()
+        self.headers = headers
+        self.required = ["Date", "Alliance", "Orig", "Dest", "Flight"]
 
 class FlightType(object):
     """ class that represents the .tsv format of Diio Mi Express 
@@ -131,10 +164,9 @@ class AirportRecord(Record):
     """
     
     def __init__(self, headers):
-        self.headers = headers
-        self.fields = collections.OrderedDict()
-        self.required = ["Code", "Name", "Latitude", "Longitude", "Country"]
         super(AirportRecord, self).__init__()
+        self.headers = headers
+        self.required = ["Code", "Name", "Latitude", "Longitude", "Country"]
 
 class AirportType(object):
     """ class that represents the .tsv format of Diio Mi Express 

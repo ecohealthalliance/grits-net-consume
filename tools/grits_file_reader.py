@@ -50,7 +50,7 @@ class GritsFileReader:
                 headers = self.header.keys() # in order
                 record = self.type.record(headers)
                 record.create(row)
-                if record.validate_required() == True:
+                if record.validate():
                     self.records.add(record)
             else:
                 if self.type.num_empty_rows_eod > 0:

@@ -1,9 +1,13 @@
 import os
 import unittest
 import math
+import mongomock
+import logging
 
 from tools.grits_record import Record, FlightRecord, AirportRecord
 from tools.grits_record import InvalidRecordProperty, InvalidRecordLength
+
+from conf import settings
 
 _SCRIPT_DIR = os.path.dirname(__file__)
 
@@ -61,6 +65,8 @@ class TestGritsRecord(unittest.TestCase):
         self.assertEqual(False, Record.could_be_int(None))
         self.assertEqual(False, Record.could_be_int("1111.10000000000.000000000"))
     
+        #self.mongo_connection.db = mongomock.Database()
+        #self.mongo_connection.db['airports'] = mongomock.Collection()
     def test_could_be_number(self):
         self.assertEqual(True, Record.could_be_number("1"))
         self.assertEqual(True, Record.could_be_number("1.1"))
@@ -88,12 +94,31 @@ class TestGritsFlightRecord(unittest.TestCase):
                         u'Seats', u'Dep Term', u'Arr Term', u'Dep Time',
                         u'Arr Time', u'Block Mins', u'Arr Flag', u'Orig WAC',
                         u'Dest WAC', u'Op Days', u'Ops/Week', u'Seats/Week']
-        self.row = [u'Jun 2015', u'W3', u'None', u'W3', u'LOS', u'JFK',
-                    u'5,250', u'107', u'0', u'332', u'251', u'I ', u'4 ',
-                    u'2330', u'0550', u'680', u'1', u'555', u'22', u'..3.5.7',
-                    u'3', u'753']
-        self.valid_obj = FlightRecord(self.headers)
-        self.invalid_obj = FlightRecord(None)
+        self.row = [u'Jun 2015', u'W3', u'None', u'W3', {u'Code':u'LOS'},
+                    {u'Code': u'JFK'}, u'5,250', u'107', u'0', u'332', u'251',
+                    u'I ', u'4 ', u'2330', u'0550', u'680', u'1', u'555',
+                    u'22', u'..3.5.7', u'3', u'753']
+        
+        self.mongo_connection = mongomock.Connection()
+        # fake the find_one method with a lambda
+        self.mongo_connection.db[settings._AIRPORT_COLLECTION_NAME].find_one = lambda x: {
+                    'Code': 'JST',
+                    'Name': 'Johnstown/Cambria',
+                    'City': 'Johnstown',
+                    'State': 'PA',
+                    'State Name': 'Pennsylvania',
+                    'loc': {
+                        'type': 'Point',
+                        'coordinates': [40.3228957, -78.92277688]
+                    },
+                    'Country': 'US',
+                    'Country Name': 'United States',
+                    'Global Region': 'North America',
+                    'WAC': 23,
+                    'Notes': ''}
+        
+        self.valid_obj = FlightRecord(self.headers, None, self.mongo_connection)
+        self.invalid_obj = FlightRecord(None, None, None)
     
     def test_create_invalid_obj(self):
         self.assertRaises(InvalidRecordProperty, self.invalid_obj.create, self.row)
@@ -101,9 +126,11 @@ class TestGritsFlightRecord(unittest.TestCase):
     def test_validate_invalid_obj(self):
         self.assertEquals(False, self.invalid_obj.validate())
     
-    def test_create_valid_obj(self):
+    def test_create_valid_obj_is_validate(self):
         self.valid_obj.create(self.row)
-        self.assertEqual(len(self.row), len(self.valid_obj.fields.values()))
+        self.valid_obj.validate()
+        logging.debug('errors: %r', self.valid_obj.validation_errors())
+        self.assertEquals(True, self.valid_obj.validate())
     
     def test_create_valid_obj_invalid_row(self):
         row = []
@@ -125,8 +152,9 @@ class TestGritsAirportRecord(unittest.TestCase):
         self.invalid_row = [u'', u'Anaa', u'Anaa', u'', u'', u'-17.351700',
                     u'-145.497800', u'PF', u'French Polynesia', u'Australasia',
                     u'823', u'']
-        self.valid_obj = AirportRecord(self.headers)
-        self.invalid_obj = AirportRecord(None)
+        self.mongo_connection = mongomock.Connection()
+        self.valid_obj = AirportRecord(self.headers, None, self.mongo_connection)
+        self.invalid_obj = AirportRecord(None, None, self.mongo_connection)
     
     def test_create_invalid_obj(self):
         self.assertRaises(InvalidRecordProperty, self.invalid_obj.create, self.row)
@@ -138,7 +166,7 @@ class TestGritsAirportRecord(unittest.TestCase):
         self.valid_obj.create(self.invalid_row)
         self.assertEquals(False, self.valid_obj.validate())
     
-    def test_create_valid_obj_validate_required(self):
+    def test_create_valid_obj_is_valid(self):
         self.valid_obj.create(self.row)
         self.assertEquals(True, self.valid_obj.validate())
     

@@ -39,7 +39,10 @@ class GritsMongoConnection(object):
         flights.create_index([("Dest.loc", pymongo.GEOSPHERE)])
     
     @staticmethod
-    def format_bulk_results(result):
+    def format_bulk_write_results(result):
+        """ BulkWriteResult object, as defined:
+        http://api.mongodb.org/python/current/api/pymongo/results.html#pymongo.results.BulkWriteResult
+        """
         if result == None:
             return {}
         
@@ -52,27 +55,52 @@ class GritsMongoConnection(object):
         
         return formatted_result
     
+    @staticmethod
+    def format_insert_many_results(result):
+        """ InsertManyResult object, as defined:
+        http://api.mongodb.org/python/current/api/pymongo/results.html#pymongo.results.InsertManyResult
+        """
+        if result == None:
+            return {}
+        
+        formatted_result = {}
+        
+        ids = result.inserted_ids
+        formatted_result['nInserted'] = len(ids)
+        
+        return formatted_result
+        
+    
     def bulk_upsert(self, collection_name, key_name, records):
+        """ bulk upsert of documents into mongodb collection """
         if len(records) == 0:
             return
         
         collection = pymongo.collection.Collection(self._db, collection_name)
         bulk = collection.initialize_ordered_bulk_op()
         for record in records:
-            bulk.find({key_name: record.fields[key_name]}).upsert().update({
-                '$set': record.fields})
+            bulk.find({key_name: record[key_name]}).upsert().update({
+                '$set': record})
         
         result = None
         try:
-            result =  bulk.execute()
+            result = bulk.execute()
         except pymongo.errors.BulkWriteError as e:
             logging.error(e.details)
         
-        return GritsMongoConnection.format_bulk_results(result)
+        return GritsMongoConnection.format_bulk_write_results(result)
     
     def insert_many(self, collection_name, records):
+        """ inserts many documents into mongodb collection """
         if len(records) == 0:
             return
         
         collection = pymongo.collection.Collection(self._db, collection_name)
-        return collection.insert_many(records)
+        
+        result = None
+        try:
+            result = collection.insert_many(records)
+        except Exception as e:
+            logging.error(e)
+            
+        return GritsMongoConnection.format_insert_many_results(result)

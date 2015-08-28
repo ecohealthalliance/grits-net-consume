@@ -15,4 +15,4 @@ class TestGritsConsumer(unittest.TestCase):
         self.assertEqual(True, self.cmd.is_valid_file_type(self.validFile))
     
     def test_is_invalid_extension(self):
-        self.assertRaises(Exception, self.cmd.is_valid_file_type(self.invalidFile))
+        self.assertEqual(False, self.cmd.is_valid_file_type(self.invalidFile))

@@ -1,9 +1,15 @@
 import os
 import argparse
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger().setLevel(logging.DEBUG)
+
+from tools.grits_file_reader import GritsFileReader
+from tools.grits_record import AirportType, FlightType
+
 
 _FILE_TYPES = ['.tsv']
+_TYPES = ['airport', 'flight']
+
 
 class GritsConsumer(object):
     """ Command line tool to parse grits transportation network data """
@@ -15,15 +21,15 @@ class GritsConsumer(object):
             'a mongodb collection.')
     
     @staticmethod
-    def file_extension(file):
-        parts = os.path.splitext(file.name)
+    def file_extension(file_obj):
+        parts = os.path.splitext(file_obj.name)
         ext = ''
         if len(parts) > 1:
             ext = parts[-1].lower()
         return ext
     
-    def is_valid_file_type(self, file):
-        ext = GritsConsumer.file_extension(file)
+    def is_valid_file_type(self, file_obj):
+        ext = GritsConsumer.file_extension(file_obj)
         if ext not in _FILE_TYPES:
             return False
         return True
@@ -33,6 +39,9 @@ class GritsConsumer(object):
             action="store_true",
             help="verbose output" )
         
+        self.parser.add_argument('-t', '--type', required=True,
+            choices=_TYPES)
+        
         self.parser.add_argument('infile',
             type=argparse.FileType('r'),
             help="file to be parsed")
@@ -41,8 +50,17 @@ class GritsConsumer(object):
     
     def run(self):
         args = self.get_args()
-        file = args.infile
-        if not self.is_valid_file_type(file):
+        if not self.is_valid_file_type(args.infile):
             msg = 'not a valid file type %r' % _FILE_TYPES
-            self.parser.error(msg)
-        logging.debug('args:%r', args)
+            self.parser.error(msg) #this calls sys.exit
+        
+        if args.type == 'airport':
+            report_type = AirportType()
+        else :
+            report_type = FlightType()
+            
+        reader = GritsFileReader(report_type, args)
+        reader.process_file()
+        
+        logging.info('records: %d', len(reader.records))
+        logging.info('args:%r', args)

@@ -1,12 +1,15 @@
 import json
 import collections
+import hashlib
 import logging
 
 from datetime import datetime
-from csv_helpers import TabDialect
+from tools.csv_helpers import TabDialect
 from cerberus import Validator
 
 _STRFTIME_FORMAT = '%b %Y'
+_FLIGHT_COLLECTION_NAME = 'flights'
+_AIRPORT_COLLECTION_NAME = 'airports'
 
 class InvalidRecordProperty(Exception):
     """ custom exception that is thrown when the record is missing required
@@ -19,6 +22,33 @@ class InvalidRecordLength(Exception):
     record does not match the header length """
     def __init__(self, message, *args, **kwargs):
         super(InvalidRecordLength, self).__init__(message)
+
+class InvalidRecord(object):
+    """ class that represents the mondoDB format of an invalid record.  This
+    is created when the file reader parses an invalid row."""
+    
+    @property
+    def schema(self):
+        return {
+            'Date': { 'type': 'datetime', 'required': True},
+            'Errors': { 'type': 'dict', 'required': True},
+            'RecordType': {'type': 'string', 'required': True},
+            'RowNum': { 'type': 'integer', 'nullable': True}
+        }
+    
+    def __init__(self, date, errors, record_type, row_num):
+        self.fields = collections.OrderedDict()
+        self.fields['Date'] = date
+        self.fields['Errors'] = errors
+        self.fields['RecordType'] = record_type
+        self.fields['RowNum'] = row_num
+        self.validator = Validator(self.schema)
+    
+    def validate(self):
+        return self.validator.validate(self.fields)
+    
+    def to_json(self):
+        return json.dumps(self.fields)
 
 class Record(object):
     """ base record class """
@@ -205,6 +235,15 @@ class Record(object):
                 self.fields[header] = None
             return
     
+    def validation_errors(self):
+        errors = self.validator.errors
+        if len(errors.keys()) > 0:
+            errors['fields'] = self.to_json()
+        return errors
+    
+    def validate(self):
+        return self.validator.validate(self.fields)
+    
     def to_json(self):
         return json.dumps(self.fields)
 
@@ -215,6 +254,7 @@ class FlightRecord(Record):
     @property
     def schema(self):
         return {
+            'key': { 'type': 'string', 'required': True},
             'Date': { 'type': 'datetime', 'required': True},
             'Mktg Al': { 'type': 'string', 'nullable': True},
             'Alliance': { 'type': 'string', 'nullable': True},
@@ -222,7 +262,7 @@ class FlightRecord(Record):
             'Orig': { 'type': 'dict'}, #airport
             'Dest': { 'type': 'dict'}, #airport
             'Miles': { 'type': 'number', 'nullable': True},
-            'Flight': { 'type': 'integer', 'nullable': True},
+            'Flight': { 'type': 'integer', 'required': True},
             'Stops': { 'type': 'integer', 'nullable': True},
             'Equip': { 'type': 'string', 'nullable': True},
             'Seats': { 'type': 'integer', 'nullable': True},
@@ -242,9 +282,18 @@ class FlightRecord(Record):
         super(FlightRecord, self).__init__()
         self.validator = Validator(self.schema)
         self.headers = headers
-    
-    def validate(self):
-        return self.validator.validate(self.fields)
+
+    def gen_key(self):
+        """ generate a unique key for this record """
+        if len(self.fields) == 0:
+            return None
+        
+        h = hashlib.sha256()
+        h.update(self.fields['Date'].isoformat())
+        h.update(str(self.fields['Op Al']))
+        h.update(str(self.fields['Flight']))
+        
+        return h.hexdigest()
     
     def create(self, row):
         """ populate the fields with the row data """
@@ -278,8 +327,7 @@ class FlightRecord(Record):
                     'State Name': 'Pennsylvania',
                     'loc': {
                         'type': 'Point',
-                        'coordinates': [40.3228957, -78.92277688]
-                    },
+                        'coordinates': [40.3228957, -78.92277688]},
                     'Country': 'US',
                     'Country Name': 'United States',
                     'Global Region': 'North America',
@@ -291,6 +339,8 @@ class FlightRecord(Record):
             
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
+        
+        self.fields['key'] = self.gen_key()
 
 class FlightType(object):
     """ class that represents the .tsv format of Diio Mi Express 
@@ -298,6 +348,8 @@ class FlightType(object):
     
     def __init__(self):
         self.name = 'extract'
+        self.collection_name = _FLIGHT_COLLECTION_NAME # name of the MongoDB collection
+        self.key_name = 'key' # name of the unique attribute to the record
         self.record = FlightRecord
         # positional processing rules
         self.title_position = 0 # zero-based position of the record set title
@@ -313,6 +365,7 @@ class AirportRecord(Record):
     @property
     def schema(self):
         return {
+            'key': { 'type': 'string', 'required': True},
             'Code': { 'type': 'string', 'required': True},
             'Name': { 'type': 'string', 'required': True},
             'City': { 'type': 'string', 'nullable': True},
@@ -320,7 +373,7 @@ class AirportRecord(Record):
             'State Name':{ 'type': 'string', 'nullable': True},
             'loc': { 'type': 'dict', 'schema': {
                 'type': {'type': 'string'},
-                'coordinates': {'type': 'list', 'required': True}}},
+                'coordinates': {'type': 'list'}}, 'nullable': False},
             'Country': { 'type': 'integer', 'nullable': True},
             'Country Name': { 'type': 'string', 'nullable': True},
             'Global Region': { 'type': 'string', 'nullable': True},
@@ -329,11 +382,31 @@ class AirportRecord(Record):
     
     def __init__(self, headers):
         super(AirportRecord, self).__init__()
+        self.collection_name = _AIRPORT_COLLECTION_NAME
         self.validator = Validator(self.schema)
         self.headers = headers
     
-    def validate(self):
-        return self.validator.validate(self.fields)
+    def gen_key(self):
+        """ generate a unique key for this record """
+        if not 'Code' in self.fields:
+            return None
+        return self.fields['Code']
+    
+    @staticmethod
+    def is_valid_coordinate_pair(coordinates):
+        longitude = coordinates[0]
+        latitude = coordinates[1]
+        
+        if longitude == None or latitude == None:
+            return False
+        
+        if latitude < -90.0 or latitude > 90.0:
+            return False
+        
+        if longitude < -180.0 or longitude > 180.0:
+            return False
+        
+        return True
     
     def create(self, row):
         """ populate the fields with the row data """
@@ -361,11 +434,12 @@ class AirportRecord(Record):
                 continue
             
             # special cases to convert to geoJSON
-            if header.lower() == 'latitude':
+            # Always list coordinates in longitude, latitude order.
+            if header.lower() == 'longitude':
                 if Record.could_be_float(field):
                     coordinates[0] = float(field)
                 continue
-            if header.lower()  == 'longitude':
+            if header.lower() == 'latitude':
                 if Record.could_be_float(field):
                     coordinates[1] = float(field)
                 continue
@@ -373,11 +447,19 @@ class AirportRecord(Record):
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
         
+        #add unique key for this record
+        self.fields['key'] = self.gen_key()
+        
+        #we cannot have invalid geoJSON objects in mongoDB
+        if AirportRecord.is_valid_coordinate_pair(coordinates):
+            loc = {
+                'type': 'Point',
+                'coordinates': coordinates
+            }
+        else:
+            loc = None
+        
         #add the geoJSON 'loc'
-        loc = {
-            'type': 'Point',
-            'coordinates': coordinates
-        }
         self.fields['loc'] = loc
 
 class AirportType(object):
@@ -386,6 +468,8 @@ class AirportType(object):
     
     def __init__(self):
         self.name = 'airport'
+        self.collection_name = _AIRPORT_COLLECTION_NAME # name of the MongoDB collection
+        self.key_name = 'Code' # name of the unique attribute to the record
         self.record = AirportRecord
         # positional processing rules
         self.title_position = 0 # zero-based position of the record set title

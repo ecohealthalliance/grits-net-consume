@@ -18,7 +18,21 @@ class GritsConsumer(object):
     
     @staticmethod
     def file_extension(file_obj):
-        """ get the file extension from a file object """
+        """ get the file extension from a file object
+            
+            The method uses os.path.spittext to get the parts of a file
+            object by its name.  The last part is the file extension
+            
+            Parameters
+            ----------
+                file_obj : object
+                    File object
+            
+            Returns
+            -------
+                str
+                    String value or None
+        """
         parts = os.path.splitext(file_obj.name)
         ext = ''
         if len(parts) > 1:
@@ -26,7 +40,22 @@ class GritsConsumer(object):
         return ext
     
     def is_valid_file_type(self, file_obj):
-        """ validate the file extension is valid """
+        """ validate the file extension is valid
+            
+            Validation method to determine if the file_obj has a valid
+            extension.  The list of valid extensions are defined in
+            conf/settings.py
+            
+            Parameters
+            ----------
+                file_obj : object
+                    File object
+            
+            Returns
+            -------
+                bool
+                    True or False
+        """
         ext = GritsConsumer.file_extension(file_obj)
         if ext not in settings._ALLOWED_FILE_EXTENSIONS:
             return False

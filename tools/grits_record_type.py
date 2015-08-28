@@ -8,6 +8,12 @@ class FlightType(object):
     flight 'Extract' report """
     
     def __init__(self):
+        """ FlightType constructor 
+        
+        Describes the 'contract' for the report, such as the positional
+        processing rules.  Also, exposes critical database information for
+        performing upserts.
+        """
         self.name = 'extract'
         self.collection_name = settings._FLIGHT_COLLECTION_NAME # name of the MongoDB collection
         self.key_name = 'key' # name of the unique attribute to the record
@@ -24,6 +30,12 @@ class AirportType(object):
     report """
     
     def __init__(self):
+        """ AirportType constructor 
+        
+        Describes the 'contract' for the report, such as the positional
+        processing rules.  Also, exposes critical database information for
+        performing upserts.
+        """
         self.name = 'airport'
         self.collection_name = settings._AIRPORT_COLLECTION_NAME # name of the MongoDB collection
         self.key_name = 'Code' # name of the unique attribute to the record

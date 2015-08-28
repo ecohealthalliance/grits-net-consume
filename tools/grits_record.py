@@ -13,12 +13,26 @@ class InvalidRecordProperty(Exception):
     """ custom exception that is thrown when the record is missing required
     properties """
     def __init__(self, message, *args, **kwargs):
+        """ InvalidRecordProperty constructor
+            
+            Parameters
+            ----------
+                message : str
+                    A descriptive message of the error
+        """
         super(InvalidRecordProperty, self).__init__(message)
 
 class InvalidRecordLength(Exception):
     """ custom exception that is thrown when the data to be inserted into the
     record does not match the header length """
     def __init__(self, message, *args, **kwargs):
+        """ InvalidRecordLength constructor
+            
+            Parameters
+            ----------
+                message : str
+                    A descriptive message of the error
+        """
         super(InvalidRecordLength, self).__init__(message)
 
 class InvalidRecord(object):
@@ -27,6 +41,7 @@ class InvalidRecord(object):
     
     @property
     def schema(self):
+        """ the cerberus schema defination used for validation of a record """
         return {
             'Date': { 'type': 'datetime', 'required': True},
             'Errors': { 'type': 'dict', 'required': True},
@@ -35,6 +50,21 @@ class InvalidRecord(object):
         }
     
     def __init__(self, date, errors, record_type, row_num):
+        """ InvalidRecord constructor
+            
+            Parameters
+            ----------
+                date : datetime
+                    The datetime.utcnow() of when the invalid record was 
+                    created
+                errors: list
+                    List of validation errors with the last row containing
+                    the records fields
+                record_type: object
+                    The type of record {AirportType, FlightType}
+                row_num: int
+                    The row number that the validation error occurred
+        """
         self.fields = collections.OrderedDict()
         self.fields['Date'] = date
         self.fields['Errors'] = errors
@@ -43,15 +73,21 @@ class InvalidRecord(object):
         self.validator = Validator(self.schema)
     
     def validate(self):
+        """ validates the record against the schema """
         return self.validator.validate(self.fields)
     
     def to_json(self):
+        """ dumps the records fields into JSON format """
         return json.dumps(self.fields)
 
 class Record(object):
-    """ base record class """
-    
+    """ base record class
+        
+        A record is an object that contains fields (ordered dictionary) that
+        are used to construct a mongoDB document.
+    """
     def __init__(self):
+        """ Record constructor """
         self.fields = collections.OrderedDict()
         
     @staticmethod
@@ -186,6 +222,26 @@ class Record(object):
         return False
     
     def set_field_by_schema(self, header, field):
+        """ allows the records field to be set by matching against the schema 
+            
+            NOTE: InvalidRecordProperty is raised if the header isn't located
+            within the schema.  This check could be disabled through a 
+            constant in settings.py, such as '_DISABLE_SCHEMA_MATCH'.
+            The side-effect would be documents in the mongoDB would have 
+            different structure but added flexibility to the parser
+            
+            Parameters
+            ----------
+            header: str
+                the name of the header
+            field: str
+                the corresponding column field of the row
+            
+            Raises
+            ------
+            InvalidRecordProperty
+                If the header value is not located within the schema
+        """
         if header not in self.schema.keys():
                 raise InvalidRecordProperty('Record schema does not have the property "%s"' % header)
         
@@ -251,6 +307,7 @@ class FlightRecord(Record):
     
     @property
     def schema(self):
+        """ the cerberus schema defination used for validation of a record """
         return {
             'key': { 'type': 'string', 'required': True},
             'Date': { 'type': 'datetime', 'required': True},
@@ -277,6 +334,18 @@ class FlightRecord(Record):
             'Seats/Week': { 'type': 'integer', 'nullable': True}}
     
     def __init__(self, headers, collection_name, mongo_connection):
+        """ FlightRecord constructor
+            
+            Parameters
+            ----------
+                headers : list
+                    The parsed header row
+                collection_name: str
+                    The name of the mongoDB collection corresponding to this
+                    record
+                mongo_connection: object
+                    The mongoDB connection
+        """
         super(FlightRecord, self).__init__()
         self.headers = headers
         self.collection_name = collection_name
@@ -296,8 +365,26 @@ class FlightRecord(Record):
         return h.hexdigest()
     
     def create(self, row):
-        """ populate the fields with the row data """
-        
+        """ populate the fields with the row data 
+            
+            The self.fields property will be populated with the column data. An
+            ordered dictionary is used as insertion order is critical to 
+            maintaining positioning with the header.  The order of the headers
+            within the file is irrelevant but the data must match.
+            
+            Parameters
+            ----------
+                row : object
+                    The parsed row containing column data
+            
+            Raises
+            ------
+                InvalidRecordProperty
+                    If the record is missing headers or the headers property
+                    is None
+                InvalidRecordLength
+                    If the record length does not equal the header.
+        """
         if not 'headers' in self.__dict__:
             raise InvalidRecordProperty('Record is missing "headers" property')
         if self.headers == None:
@@ -335,6 +422,7 @@ class AirportRecord(Record):
     
     @property
     def schema(self):
+        """ the cerberus schema defination used for validation of a record """
         return {
             'key': { 'type': 'string', 'required': True},
             'Code': { 'type': 'string', 'required': True},
@@ -366,6 +454,14 @@ class AirportRecord(Record):
     
     @staticmethod
     def is_valid_coordinate_pair(coordinates):
+        """ validates that a pair of coordinates are floats representing
+        longitudes and latitudes 
+        
+            Parameters
+            ----------
+                coordinates: list
+                    The coordinate pair as [longitude,latitude]
+        """
         longitude = coordinates[0]
         latitude = coordinates[1]
         
@@ -381,8 +477,26 @@ class AirportRecord(Record):
         return True
     
     def create(self, row):
-        """ populate the fields with the row data """
-        
+        """ populate the fields with the row data 
+            
+            The self.fields property will be populated with the column data. An
+            ordered dictionary is used as insertion order is critical to 
+            maintaining positioning with the header.  The order of the headers
+            within the file is irrelevant but the data must match.
+            
+            Parameters
+            ----------
+                row : object
+                    The parsed row containing column data
+            
+            Raises
+            ------
+                InvalidRecordProperty
+                    If the record is missing headers or the headers property
+                    is None
+                InvalidRecordLength
+                    If the record length does not equal the header.
+        """
         if not 'headers' in self.__dict__:
             raise InvalidRecordProperty('Record is missing "headers" property')
         if self.headers == None:
@@ -433,4 +547,3 @@ class AirportRecord(Record):
         
         #add the geoJSON 'loc'
         self.fields['loc'] = loc
-

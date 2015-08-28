@@ -88,10 +88,10 @@ class TestGritsFlightRecord(unittest.TestCase):
                         u'Seats', u'Dep Term', u'Arr Term', u'Dep Time',
                         u'Arr Time', u'Block Mins', u'Arr Flag', u'Orig WAC',
                         u'Dest WAC', u'Op Days', u'Ops/Week', u'Seats/Week']
-        self.row = [u'Jun 2015', u'W3', u'None', u'W3', u'LOS', u'JFK',
-                    u'5,250', u'107', u'0', u'332', u'251', u'I ', u'4 ',
-                    u'2330', u'0550', u'680', u'1', u'555', u'22', u'..3.5.7',
-                    u'3', u'753']
+        self.row = [u'Jun 2015', u'W3', u'None', u'W3', {u'Code':u'LOS'},
+                    {u'Code': u'JFK'}, u'5,250', u'107', u'0', u'332', u'251',
+                    u'I ', u'4 ', u'2330', u'0550', u'680', u'1', u'555',
+                    u'22', u'..3.5.7', u'3', u'753']
         self.valid_obj = FlightRecord(self.headers)
         self.invalid_obj = FlightRecord(None)
     
@@ -101,9 +101,9 @@ class TestGritsFlightRecord(unittest.TestCase):
     def test_validate_invalid_obj(self):
         self.assertEquals(False, self.invalid_obj.validate())
     
-    def test_create_valid_obj(self):
+    def test_create_valid_obj_is_validate(self):
         self.valid_obj.create(self.row)
-        self.assertEqual(len(self.row), len(self.valid_obj.fields.values()))
+        self.assertEquals(True, self.valid_obj.validate())
     
     def test_create_valid_obj_invalid_row(self):
         row = []
@@ -138,7 +138,7 @@ class TestGritsAirportRecord(unittest.TestCase):
         self.valid_obj.create(self.invalid_row)
         self.assertEquals(False, self.valid_obj.validate())
     
-    def test_create_valid_obj_validate_required(self):
+    def test_create_valid_obj_is_valid(self):
         self.valid_obj.create(self.row)
         self.assertEquals(True, self.valid_obj.validate())
     

@@ -1,6 +1,8 @@
 import pymongo
 import logging
 
+from conf import settings
+
 class GritsMongoConnection(object):
     """ class that contains the connection details to mongo 
         
@@ -46,10 +48,10 @@ class GritsMongoConnection(object):
     
     def ensure_indexes(self):
         """ creates indexes on the collections if they do not exist """
-        airports = pymongo.collection.Collection(self._db, 'airports')
+        airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
         airports.create_index([("key", pymongo.ASCENDING)], unique=True)
         airports.create_index([("loc", pymongo.GEOSPHERE)])
-        flights = pymongo.collection.Collection(self._db, 'flights')
+        flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
         flights.create_index([("key", pymongo.ASCENDING)], unique=True)
         flights.create_index([("Orig.Code", pymongo.ASCENDING)])
         flights.create_index([("Dest.Code", pymongo.ASCENDING)])

@@ -14,7 +14,6 @@ class FlightType(object):
         processing rules.  Also, exposes critical database information for
         performing upserts.
         """
-        self.name = 'extract'
         self.collection_name = settings._FLIGHT_COLLECTION_NAME # name of the MongoDB collection
         self.key_name = 'key' # name of the unique attribute to the record
         self.record = FlightRecord
@@ -36,7 +35,6 @@ class AirportType(object):
         processing rules.  Also, exposes critical database information for
         performing upserts.
         """
-        self.name = 'airport'
         self.collection_name = settings._AIRPORT_COLLECTION_NAME # name of the MongoDB collection
         self.key_name = 'Code' # name of the unique attribute to the record
         self.record = AirportRecord

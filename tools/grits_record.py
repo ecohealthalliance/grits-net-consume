@@ -307,7 +307,7 @@ class FlightRecord(Record):
     
     @property
     def schema(self):
-        """ the cerberus schema defination used for validation of a record """
+        """ the cerberus schema definition used for validation of a record """
         return {
             'key': { 'type': 'string', 'required': True},
             'Date': { 'type': 'datetime', 'required': True},
@@ -422,9 +422,8 @@ class AirportRecord(Record):
     
     @property
     def schema(self):
-        """ the cerberus schema defination used for validation of a record """
+        """ the cerberus schema definition used for validation of a record """
         return {
-            'key': { 'type': 'string', 'required': True},
             'Code': { 'type': 'string', 'required': True},
             'Name': { 'type': 'string', 'required': True},
             'City': { 'type': 'string', 'nullable': True},
@@ -532,9 +531,6 @@ class AirportRecord(Record):
             
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
-        
-        #add unique key for this record
-        self.fields['key'] = self.gen_key()
         
         #we cannot have invalid geoJSON objects in mongoDB
         if AirportRecord.is_valid_coordinate_pair(coordinates):

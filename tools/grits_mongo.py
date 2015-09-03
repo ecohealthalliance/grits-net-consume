@@ -2,7 +2,6 @@ import pymongo
 import logging
 
 from conf import settings
-from tools.grits_record_type import AirportType, FlightType
 
 class GritsMongoConnection(object):
     """ class that contains the connection details to mongo 

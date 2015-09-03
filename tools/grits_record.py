@@ -86,10 +86,20 @@ class Record(object):
         A record is an object that contains fields (ordered dictionary) that
         are used to construct a mongoDB document.
     """
+    
+    @property
+    def id(self):
+        return self._id;
+    
+    @id.setter
+    def id(self, val):
+        self._id = val
+    
     def __init__(self):
         """ Record constructor """
         self.fields = collections.OrderedDict()
-        
+        self._id = None
+         
     @staticmethod
     def is_empty_str(val):
         """ check if the val is an empty string"""
@@ -296,6 +306,13 @@ class Record(object):
         return errors
     
     def validate(self):
+        """ validate the record 
+        
+            This is a combination of checking the property _id is not None
+            and that all fields within the schema are valid
+        """
+        if self._id == None:
+            return False
         return self.validator.validate(self.fields)
     
     def to_json(self):
@@ -309,7 +326,7 @@ class FlightRecord(Record):
     def schema(self):
         """ the cerberus schema definition used for validation of a record """
         return {
-            'key': { 'type': 'string', 'required': True},
+            # _id is md5 hash of (Date, Op Al, and Flight)
             'Date': { 'type': 'datetime', 'required': True},
             'Mktg Al': { 'type': 'string', 'nullable': True},
             'Alliance': { 'type': 'string', 'nullable': True},
@@ -357,7 +374,7 @@ class FlightRecord(Record):
         if len(self.fields) == 0:
             return None
         
-        h = hashlib.sha256()
+        h = hashlib.md5()
         h.update(self.fields['Date'].isoformat())
         h.update(str(self.fields['Op Al']))
         h.update(str(self.fields['Flight']))
@@ -407,14 +424,14 @@ class FlightRecord(Record):
             # special cases to convert to geoJSON
             if header.lower() == 'orig' or header.lower() == 'dest':
                 db = self.mongo_connection.db
-                airport = db[settings._AIRPORT_COLLECTION_NAME].find_one({'Code':field})
+                airport = db[settings._AIRPORT_COLLECTION_NAME].find_one({'_id':field})
                 self.fields[header] = airport
                 continue
             
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
         
-        self.fields['key'] = self.gen_key()
+        self.id = self.gen_key()
 
 class AirportRecord(Record):
     """ class that represents the mondoDB format of Diio Mi Express 
@@ -424,7 +441,7 @@ class AirportRecord(Record):
     def schema(self):
         """ the cerberus schema definition used for validation of a record """
         return {
-            'Code': { 'type': 'string', 'required': True},
+            # _id is the airport 'Code'
             'Name': { 'type': 'string', 'required': True},
             'City': { 'type': 'string', 'nullable': True},
             'State': { 'type': 'string', 'nullable': True},
@@ -444,12 +461,6 @@ class AirportRecord(Record):
         self.collection_name = collection_name
         self.mongo_connection = mongo_connection
         self.validator = Validator(self.schema)
-    
-    def gen_key(self):
-        """ generate a unique key for this record """
-        if not 'Code' in self.fields:
-            return None
-        return self.fields['Code']
     
     @staticmethod
     def is_valid_coordinate_pair(coordinates):
@@ -516,6 +527,12 @@ class AirportRecord(Record):
             
             # we ignore empty headers
             if Record.is_empty_str(header):
+                continue
+            
+            # special case for unique id
+            if header.lower() == 'code':
+                if not Record.is_empty_str(field):
+                    self.id = field;
                 continue
             
             # special cases to convert to geoJSON

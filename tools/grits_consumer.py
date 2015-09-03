@@ -118,14 +118,12 @@ class GritsConsumer(object):
         logging.debug('num_records: %d', num_records)
         logging.debug('num_invalid_records: %d', num_invalid_records)
         
-        # get list of the record fields (dict) for upsert into mongoDB
-        records = map(lambda x: x.fields, reader.records)
-        record_results = mongo_connection.bulk_upsert(reader.type.collection_name, reader.type.key_name, records)
+        # bulk upsert reader.records into mongodb
+        record_results = mongo_connection.bulk_upsert(reader.type.collection_name, reader.records)
         logging.debug('record_results: %r', record_results)
         
         # get list of the invalid fields (dict) for insertion into mongoDB
-        invalid_records = map(lambda x: x.fields, reader.invalid_records)
-        invalid_record_results = mongo_connection.insert_many(settings._INVALID_RECORD_COLLECTION_NAME, invalid_records)
+        invalid_record_results = mongo_connection.insert_many(settings._INVALID_RECORD_COLLECTION_NAME, reader.invalid_records)
         logging.debug('invalid_record_results: %r', invalid_record_results)
         
         # addition debug info

@@ -49,15 +49,9 @@ class GritsMongoConnection(object):
     
     def ensure_indexes(self):
         """ creates indexes on the collections if they do not exist """
-        airportType = AirportType()
         airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
-        airports.create_index([(airportType.key_name, pymongo.ASCENDING)], unique=True)
         airports.create_index([("loc", pymongo.GEOSPHERE)])
-        flightType = FlightType()
         flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
-        flights.create_index([(flightType.key_name, pymongo.ASCENDING)], unique=True)
-        flights.create_index([("Orig.Code", pymongo.ASCENDING)])
-        flights.create_index([("Dest.Code", pymongo.ASCENDING)])
         flights.create_index([("Orig.loc", pymongo.GEOSPHERE)])
         flights.create_index([("Dest.loc", pymongo.GEOSPHERE)])
     
@@ -96,16 +90,13 @@ class GritsMongoConnection(object):
         return formatted_result
         
     
-    def bulk_upsert(self, collection_name, key_name, records):
+    def bulk_upsert(self, collection_name, records):
         """ bulk upsert of documents into mongodb collection 
             
             Parameters
             ----------
                 collection_name: str
                     The name of the mongoDB collection
-                key_name: str
-                    The name of the unique key to find existing records,
-                    required for the concept of an upsert
                 records: list
                     A list of record.fields.
         """
@@ -115,8 +106,8 @@ class GritsMongoConnection(object):
         collection = pymongo.collection.Collection(self._db, collection_name)
         bulk = collection.initialize_ordered_bulk_op()
         for record in records:
-            bulk.find({key_name: record[key_name]}).upsert().update({
-                '$set': record})
+            bulk.find({'_id': record.id}).upsert().update({
+                '$set': record.fields})
         
         result = None
         try:
@@ -133,16 +124,18 @@ class GritsMongoConnection(object):
                 collection_name: str
                     The name of the mongoDB collection
                 records: list
-                    A list of record.fields.
+                    A list of records.
         """
         if len(records) == 0:
             return
         
+        record_fields = map(lambda x: x.fields, records)
+
         collection = pymongo.collection.Collection(self._db, collection_name)
         
         result = None
         try:
-            result = collection.insert_many(records)
+            result = collection.insert_many(record_fields)
         except Exception as e:
             logging.error(e)
             

@@ -2,3 +2,4 @@ pymongo
 mongomock
 nose
 cerberus
+git+https://github.com/uqfoundation/pathos.git@master

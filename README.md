@@ -27,30 +27,34 @@ MongoDB with geospatial indexing.
    a month.  However, it must be done at least once prior to running the flight
    data import below.)
 
-  ``` python grits_consume.py --type airport test/data/MiExpressAllAirportCodes.tsv ```
+  ```
+  python grits_consume.py --type DiioAirport test/data/MiExpressAllAirportCodes.tsv
+  ```
 
 2. Upsert flight extraction report data
 
-  ``` python grits_consume.py --type flight test/data/Schedule_Weekly_Extract_Report.tsv ```
-  
+  ``` 
+  python grits_consume.py --type FlightGlobal test/data/GlobalDirectsSample_20150728.csv
+  ```
+
 
 ## program options
 
   ```
-	usage: grits_consume.py [-h] [-v] -t {airport,flight} [-u USERNAME]
+	usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]
 	                      [-p PASSWORD] [-d DATABASE] [-m MONGOHOST]
 	                      infile
 
 	script to parse the grits transportation network data file and populate a
 	mongodb collection.
-	
+
 	positional arguments:
 	  infile                the file to be parsed
-	
+
 	optional arguments:
 	  -h, --help            show this help message and exit
 	  -v, --verbose         verbose output
-	  -t {airport,flight}, --type {airport,flight}
+	  -t {DiioAirport,FlightGlobal}, --type {DiioAirport,FlightGlobal}
 	                        the type of report to be parsed
 	  -u USERNAME, --username USERNAME
 	                        the username for mongoDB (Default: None)

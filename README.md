@@ -25,17 +25,21 @@ MongoDB with geospatial indexing.
    a month.  However, it must be done at least once prior to running the flight
    data import below.)
 
-  ``` python grits_consume.py --type DiioAirport test/data/MiExpressAllAirportCodes.tsv ```
+  ```
+  python grits_consume.py --type DiioAirport test/data/MiExpressAllAirportCodes.tsv
+  ```
 
 2. Upsert flight extraction report data
 
-  ``` python grits_consume.py --type FlightGlobal test/data/Schedule_Weekly_Extract_Report.tsv ```
+  ``` 
+  python grits_consume.py --type FlightGlobal test/data/GlobalDirectsSample_20150728.csv
+  ```
 
 
 ## program options
 
   ```
-	usage: grits_consume.py [-h] [-v] -t {airport,flight} [-u USERNAME]
+	usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]
 	                      [-p PASSWORD] [-d DATABASE] [-m MONGOHOST]
 	                      infile
 

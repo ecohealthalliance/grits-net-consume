@@ -99,7 +99,7 @@ class TestGritsFlightRecord(unittest.TestCase):
                     u'I ', u'4 ', u'2330', u'0550', u'680', u'1', u'555',
                     u'22', u'..3.5.7', u'3', u'753']
         
-        self.mongo_connection = mongomock.Connection()
+        self.mongo_connection = mongomock.MongoClient()
         # fake the find_one method with a lambda
         self.mongo_connection.db[settings._AIRPORT_COLLECTION_NAME].find_one = lambda x: {
                     'Code': 'JST',
@@ -152,7 +152,7 @@ class TestGritsAirportRecord(unittest.TestCase):
         self.invalid_row = [u'', u'Anaa', u'Anaa', u'', u'', u'-17.351700',
                     u'-145.497800', u'PF', u'French Polynesia', u'Australasia',
                     u'823', u'']
-        self.mongo_connection = mongomock.Connection()
+        self.mongo_connection = mongomock.MongoClient()
         self.valid_obj = AirportRecord(self.headers, None, self.mongo_connection)
         self.invalid_obj = AirportRecord(None, None, self.mongo_connection)
     

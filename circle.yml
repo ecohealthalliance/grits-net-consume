@@ -1,0 +1,8 @@
+dependencies:
+  pre:
+    - sudo apt-get install -y mongodb-org
+test:
+  post:
+    - python grits_consume.py --type DiioAirport ./tests/data/MiExpressAllAirportCodes.tsv
+    - python grits_consume.py --type FlightGlobal ./tests/data/GlobalDirectsSample_20150728.csv
+    - mongo ./tests/integration-tests.js

@@ -1,5 +1,5 @@
 # grits-net-consume
-![Build Status](https://circleci.com/gh/ecohealthalliance/grits-net-consume.svg?style=shield&circle-token=6ec5b4f6d79595bb412aaa793c61c3d01c4f87e3)
+[![Build Status](https://circleci.com/gh/ecohealthalliance/grits-net-consume.svg?style=shield&circle-token=6ec5b4f6d79595bb412aaa793c61c3d01c4f87e3)](https://circleci.com/gh/ecohealthalliance/grits-net-consume)
 
 A Python script to parse the transport network information in the provided format and load it into
 MongoDB with geospatial indexing.

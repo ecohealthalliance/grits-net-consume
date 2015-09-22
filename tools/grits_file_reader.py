@@ -4,6 +4,7 @@ import collections
 import time
 import sys
 
+import _strptime
 from pathos.threading import ThreadPool
 from datetime import datetime
 

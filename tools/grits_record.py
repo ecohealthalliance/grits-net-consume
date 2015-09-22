@@ -315,7 +315,7 @@ class Record(object):
             This is a combination of checking the property _id is not None
             and that all fields within the schema are valid
         """
-        if self._id == None:
+        if self.id == None:
             return False
         return self.validator.validate(self.fields)
 
@@ -439,10 +439,15 @@ class FlightRecord(Record):
 
     def gen_key(self):
         """ generate a unique key for this record """
+
         if len(self.fields) == 0:
             return None
 
-        if self.validate() == False:
+        # we do not call self.validate() here as self._id will always be null,
+        # so we call self.validator.validate on the schema.  This will validate
+        # that 'effectiveDate', 'carrier', and 'flightNumber' are not None
+        # and of valid data type
+        if self.validator.validate(self.fields) == False:
             return None
 
         h = hashlib.md5()

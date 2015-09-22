@@ -49,14 +49,11 @@ class InvalidRecord(object):
             'RowNum': { 'type': 'integer', 'nullable': True}
         }
 
-    def __init__(self, date, errors, record_type, row_num):
+    def __init__(self, errors, record_type, row_num):
         """ InvalidRecord constructor
 
             Parameters
             ----------
-                date : datetime
-                    The datetime.utcnow() of when the invalid record was
-                    created
                 errors: list
                     List of validation errors with the last row containing
                     the records fields
@@ -66,7 +63,7 @@ class InvalidRecord(object):
                     The row number that the validation error occurred
         """
         self.fields = collections.OrderedDict()
-        self.fields['Date'] = date
+        self.fields['Date'] = datetime.utcnow()
         self.fields['Errors'] = errors
         self.fields['RecordType'] = record_type
         self.fields['RowNum'] = row_num
@@ -445,7 +442,7 @@ class FlightRecord(Record):
         if len(self.fields) == 0:
             return None
 
-        if self.validate == False:
+        if self.validate() == False:
             return None
 
         h = hashlib.md5()

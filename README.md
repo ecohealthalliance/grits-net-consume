@@ -4,6 +4,20 @@
 A Python script to parse the transport network information in the provided format and load it into
 MongoDB with geospatial indexing.
 
+## prerequisites
+
+##### Machintosh OS X
+  - Xcode
+  - homebrew
+  - python (2.7.10)
+See the following guide: http://docs.python-guide.org/en/latest/starting/install/osx/
+
+##### Ubuntu
+ - build-essential (for gcc)
+ - python (2.7.10)
+ - python-dev (2.7.10)
+ - python-setuptools
+
 ## install
 
 1. setup virtualenv

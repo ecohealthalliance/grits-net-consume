@@ -49,14 +49,11 @@ class InvalidRecord(object):
             'RowNum': { 'type': 'integer', 'nullable': True}
         }
 
-    def __init__(self, date, errors, record_type, row_num):
+    def __init__(self, errors, record_type, row_num):
         """ InvalidRecord constructor
 
             Parameters
             ----------
-                date : datetime
-                    The datetime.utcnow() of when the invalid record was
-                    created
                 errors: list
                     List of validation errors with the last row containing
                     the records fields
@@ -66,7 +63,7 @@ class InvalidRecord(object):
                     The row number that the validation error occurred
         """
         self.fields = collections.OrderedDict()
-        self.fields['Date'] = date
+        self.fields['Date'] = datetime.utcnow()
         self.fields['Errors'] = errors
         self.fields['RecordType'] = record_type
         self.fields['RowNum'] = row_num
@@ -318,7 +315,7 @@ class Record(object):
             This is a combination of checking the property _id is not None
             and that all fields within the schema are valid
         """
-        if self._id == None:
+        if self.id == None:
             return False
         return self.validator.validate(self.fields)
 
@@ -442,10 +439,15 @@ class FlightRecord(Record):
 
     def gen_key(self):
         """ generate a unique key for this record """
+
         if len(self.fields) == 0:
             return None
 
-        if self.validate == False:
+        # we do not call self.validate() here as self._id will always be null,
+        # so we call self.validator.validate on the schema.  This will validate
+        # that 'effectiveDate', 'carrier', and 'flightNumber' are not None
+        # and of valid data type
+        if self.validator.validate(self.fields) == False:
             return None
 
         h = hashlib.md5()

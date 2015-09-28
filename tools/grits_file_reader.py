@@ -4,6 +4,7 @@ import collections
 import time
 import sys
 
+import _strptime
 from pathos.threading import ThreadPool
 from datetime import datetime
 
@@ -148,7 +149,7 @@ class GritsFileReader:
                 if record.validate():
                     return [record,None]
                 else:
-                    invalid_record = InvalidRecord(datetime.utcnow(), record.validation_errors(), type(record).__name__, record.row_count)
+                    invalid_record = InvalidRecord(record.validation_errors(), type(record).__name__, record.row_count)
                     if invalid_record.validate():
                         return [None,invalid_record]
             else:

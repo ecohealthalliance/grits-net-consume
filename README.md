@@ -42,13 +42,13 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
    data import below.)
 
   ```
-  python grits_consume.py --type DiioAirport test/data/MiExpressAllAirportCodes.tsv
+  python grits_consume.py --type DiioAirport tests/data/MiExpressAllAirportCodes.tsv
   ```
 
 2. Upsert flight extraction report data
 
   ``` 
-  python grits_consume.py --type FlightGlobal test/data/GlobalDirectsSample_20150728.csv
+  python grits_consume.py --type FlightGlobal tests/data/GlobalDirectsSample_20150728.csv
   ```
 
 

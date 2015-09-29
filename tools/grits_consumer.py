@@ -8,6 +8,19 @@ from tools.grits_mongo import GritsMongoConnection
 
 from conf import settings
 
+class MissingRecords(Exception):
+    """ custom exception that is thrown when the FlightGlobalType is run without
+    any existing airports in mongodb """
+    def __init__(self, message, *args, **kwargs):
+        """ MissingRecords constructor
+
+            Parameters
+            ----------
+                message : str
+                    A descriptive message of the error
+        """
+        super(MissingRecords, self).__init__(message)
+
 class GritsConsumer(object):
     """ Command line tool to parse grits transportation network data """
 
@@ -108,6 +121,13 @@ class GritsConsumer(object):
 
         # setup the mongoDB connection
         mongo_connection = GritsMongoConnection(program_args)
+
+        # check if the airport import has been run first
+        if type(report_type) == FlightGlobalType:
+            db = mongo_connection.db;
+            num_airports = db[settings._AIRPORT_COLLECTION_NAME].find().count();
+            if num_airports == 0:
+                raise MissingRecords('Please import the type DiioAirport before FlightGlobal')
 
         # create a new file reader object of the specified report type
         reader = GritsFileReader(report_type, program_args)

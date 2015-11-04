@@ -313,7 +313,7 @@ class Record(object):
             return
 
         if data_type == 'boolean':
-            self.fields[header] = self.parse_boolean(field)
+            self.fields[header] = Record.parse_boolean(field)
             return
 
     def validation_errors(self):

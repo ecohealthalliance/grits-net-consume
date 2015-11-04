@@ -37,6 +37,21 @@ class TestGritsRecord(unittest.TestCase):
         self.assertEqual(False, Record.could_be_boolean(1234))
         self.assertEqual(False, Record.could_be_boolean(None))
 
+    def test_parse_boolean(self):
+        self.assertEqual(True, Record.parse_boolean("1"))
+        self.assertEqual(None, Record.parse_boolean("100"))
+        self.assertEqual(True, Record.parse_boolean("TrUe"))
+        self.assertEqual(False, Record.parse_boolean("FaLSe"))
+        self.assertEqual(True, Record.parse_boolean("true"))
+        self.assertEqual(False, Record.parse_boolean("false"))
+        self.assertEqual(False, Record.parse_boolean("0"))
+        self.assertEqual(None, Record.parse_boolean("ABCD"))
+        self.assertEqual(True, Record.parse_boolean(True))
+        self.assertEqual(False, Record.parse_boolean(False))
+        self.assertEqual(False, Record.parse_boolean(0))
+        self.assertEqual(True, Record.parse_boolean(1))
+        self.assertEqual(None, Record.parse_boolean(None))
+
     def test_could_be_float(self):
         self.assertEqual(True, Record.could_be_float("1"))
         self.assertEqual(True, Record.could_be_float(u"1.1"))

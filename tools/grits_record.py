@@ -229,6 +229,22 @@ class Record(object):
         #otherwise
         return False
 
+    @staticmethod
+    def parse_boolean(field):
+        if Record.could_be_boolean(field):
+            if Record.could_be_int(field):
+                return bool(int(field))
+
+            if isinstance(field, (str, unicode)):
+                if field.lower() == 'true':
+                    return True
+                if field.lower() == 'false':
+                    return False
+
+            return bool(field)
+        return None
+
+
     def set_field_by_schema(self, header, field):
         """ allows the records field to be set by matching against the schema
 
@@ -297,13 +313,7 @@ class Record(object):
             return
 
         if data_type == 'boolean':
-            if Record.could_be_boolean(field):
-                if Record.could_be_int(field):
-                    self.fields[header] = bool(int(field))
-                else:
-                    self.fields[header] = bool(field)
-            else:
-                self.fields[header] = None
+            self.fields[header] = self.parse_boolean(field)
             return
 
     def validation_errors(self):

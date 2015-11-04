@@ -298,7 +298,8 @@ class Record(object):
 
         if data_type == 'boolean':
             if Record.could_be_boolean(field):
-                self.fields[header] = bool(field)
+                if Record.could_be_int(field):
+                    self.fields[header] = bool(int(field))
             else:
                 self.fields[header] = None
             return
@@ -391,7 +392,7 @@ class FlightRecord(Record):
             #'recordId' : { 'type': 'integer', 'nullable': True},
             #'daysOfOperation' : { 'type': 'string', 'nullable': True},
             #'totalFrequency' : { 'type': 'integer', 'nullable': True},
-            #'weeklyFrequency' : { 'type': 'integer', 'nullable': True},
+            'weeklyFrequency' : { 'type': 'integer', 'nullable': True, 'required': False},
             #'availSeatMi' : { 'type': 'integer', 'nullable': True},
             #'availSeatKm' : { 'type': 'integer', 'nullable': True},
             #'intStopArrivaltime' : { 'type': 'list', 'nullable': True},
@@ -457,6 +458,24 @@ class FlightRecord(Record):
 
         return h.hexdigest()
 
+    def gen_weeklyFrequency(self):
+        """ generate the weeklyFrequency for this record """
+
+        if len(self.fields) == 0:
+            return None
+
+        if self.validator.validate(self.fields) == False:
+            return None
+
+        weeklyFrequency = 0
+        dayFields = ['day1','day2','day3','day4','day5','day6','day7']
+        for dayField in dayFields:
+            if dayField in self.fields:
+                if self.fields[dayField] == True:
+                    weeklyFrequency += 1
+
+        return weeklyFrequency
+
     def create(self, row):
         """ populate the fields with the row data
 
@@ -520,6 +539,7 @@ class FlightRecord(Record):
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
 
+        self.fields['weeklyFrequency'] = self.gen_weeklyFrequency()
         self.id = self.gen_key()
 
 class AirportRecord(Record):
@@ -541,7 +561,8 @@ class AirportRecord(Record):
             'countryName': { 'type': 'string', 'nullable': True},
             'globalRegion': { 'type': 'string', 'nullable': True},
             'WAC': { 'type': 'integer', 'nullable': True},
-            'notes': { 'type': 'string', 'nullable': True}}
+            'notes': { 'type': 'string', 'nullable': True},
+            'searchableDescription': { 'type': 'string', 'required': True, 'nullable': False}}
 
     def __init__(self, header_row, provider_map, collection_name, row_count, mongo_connection):
         super(AirportRecord, self).__init__()
@@ -576,6 +597,18 @@ class AirportRecord(Record):
             return False
 
         return True
+
+    def gen_searchableDescription(self):
+        """ generate the searchableDescription for this record """
+
+        if len(self.fields) == 0:
+            return None
+
+        searchableDescription = ""
+        if self.id and 'name' in self.fields:
+            searchableDescription = self.id + " " + self.fields['name']
+
+        return searchableDescription
 
     def create(self, row):
         """ populate the fields with the row data
@@ -657,3 +690,4 @@ class AirportRecord(Record):
 
         #add the geoJSON 'loc'
         self.fields['loc'] = loc
+        self.fields['searchableDescription'] = self.gen_searchableDescription()

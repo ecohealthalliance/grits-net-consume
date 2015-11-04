@@ -300,6 +300,8 @@ class Record(object):
             if Record.could_be_boolean(field):
                 if Record.could_be_int(field):
                     self.fields[header] = bool(int(field))
+                else:
+                    self.fields[header] = bool(field)
             else:
                 self.fields[header] = None
             return

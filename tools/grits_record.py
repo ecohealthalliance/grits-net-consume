@@ -573,8 +573,7 @@ class AirportRecord(Record):
             'countryName': { 'type': 'string', 'nullable': True},
             'globalRegion': { 'type': 'string', 'nullable': True},
             'WAC': { 'type': 'integer', 'nullable': True},
-            'notes': { 'type': 'string', 'nullable': True},
-            'searchableDescription': { 'type': 'string', 'required': True, 'nullable': False}}
+            'notes': { 'type': 'string', 'nullable': True}}
 
     def __init__(self, header_row, provider_map, collection_name, row_count, mongo_connection):
         super(AirportRecord, self).__init__()
@@ -610,17 +609,6 @@ class AirportRecord(Record):
 
         return True
 
-    def gen_searchableDescription(self):
-        """ generate the searchableDescription for this record """
-
-        if len(self.fields) == 0:
-            return None
-
-        searchableDescription = ""
-        if self.id and 'name' in self.fields:
-            searchableDescription = self.id + " " + self.fields['name']
-
-        return searchableDescription
 
     def create(self, row):
         """ populate the fields with the row data
@@ -702,4 +690,3 @@ class AirportRecord(Record):
 
         #add the geoJSON 'loc'
         self.fields['loc'] = loc
-        self.fields['searchableDescription'] = self.gen_searchableDescription()

@@ -11,3 +11,4 @@ eggs
 parts
 src/*.egg-info
 grits-net-consume-env
+data/*

@@ -229,6 +229,22 @@ class Record(object):
         #otherwise
         return False
 
+    @staticmethod
+    def parse_boolean(field):
+        if Record.could_be_boolean(field):
+            if Record.could_be_int(field):
+                return bool(int(field))
+
+            if isinstance(field, (str, unicode)):
+                if field.lower() == 'true':
+                    return True
+                if field.lower() == 'false':
+                    return False
+
+            return bool(field)
+        return None
+
+
     def set_field_by_schema(self, header, field):
         """ allows the records field to be set by matching against the schema
 
@@ -297,10 +313,7 @@ class Record(object):
             return
 
         if data_type == 'boolean':
-            if Record.could_be_boolean(field):
-                self.fields[header] = bool(field)
-            else:
-                self.fields[header] = None
+            self.fields[header] = Record.parse_boolean(field)
             return
 
     def validation_errors(self):
@@ -391,7 +404,7 @@ class FlightRecord(Record):
             #'recordId' : { 'type': 'integer', 'nullable': True},
             #'daysOfOperation' : { 'type': 'string', 'nullable': True},
             #'totalFrequency' : { 'type': 'integer', 'nullable': True},
-            #'weeklyFrequency' : { 'type': 'integer', 'nullable': True},
+            'weeklyFrequency' : { 'type': 'integer', 'nullable': True, 'required': False},
             #'availSeatMi' : { 'type': 'integer', 'nullable': True},
             #'availSeatKm' : { 'type': 'integer', 'nullable': True},
             #'intStopArrivaltime' : { 'type': 'list', 'nullable': True},
@@ -457,6 +470,24 @@ class FlightRecord(Record):
 
         return h.hexdigest()
 
+    def gen_weeklyFrequency(self):
+        """ generate the weeklyFrequency for this record """
+
+        if len(self.fields) == 0:
+            return None
+
+        if self.validator.validate(self.fields) == False:
+            return None
+
+        weeklyFrequency = 0
+        dayFields = ['day1','day2','day3','day4','day5','day6','day7']
+        for dayField in dayFields:
+            if dayField in self.fields:
+                if self.fields[dayField] == True:
+                    weeklyFrequency += 1
+
+        return weeklyFrequency
+
     def create(self, row):
         """ populate the fields with the row data
 
@@ -520,6 +551,7 @@ class FlightRecord(Record):
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
 
+        self.fields['weeklyFrequency'] = self.gen_weeklyFrequency()
         self.id = self.gen_key()
 
 class AirportRecord(Record):
@@ -576,6 +608,7 @@ class AirportRecord(Record):
             return False
 
         return True
+
 
     def create(self, row):
         """ populate the fields with the row data

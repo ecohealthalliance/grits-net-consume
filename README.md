@@ -47,10 +47,20 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 
 2. Upsert flight extraction report data
 
+  2a.  Example of upserting test data:
   ``` 
   python grits_consume.py --type FlightGlobal tests/data/GlobalDirectsSample_20150728.csv
   ```
+  
+  2b.  Example of upserting last FTP data (no args):
+  ``` 
+  python grits_consume.py
+  ```
 
+3. Create the indexes on the database
+  ``` 
+  python grits_ensure_index.py
+  ```
 
 ## program options
 
@@ -78,4 +88,23 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 	                        the database for mongoDB (Default: grits)
 	  -m MONGOHOST, --mongohost MONGOHOST
 	                        the hostname for mongoDB (Default: localhost)
+  ```
+  
+  ```
+	usage: grits_ensure_index.py [-h] [-u USERNAME] [-p PASSWORD] [-d DATABASE]
+	                             [-m MONGOHOST]
+	
+	script to set the mongodb indexes for grits transportation network data.
+	
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -u USERNAME, --username USERNAME
+	                        the username for mongoDB (Default: None)
+	  -p PASSWORD, --password PASSWORD
+	                        the password for mongoDB (Default: None)
+	  -d DATABASE, --database DATABASE
+	                        the database for mongoDB (Default: grits)
+	  -m MONGOHOST, --mongohost MONGOHOST
+	                        the hostname for mongoDB (Default: localhost)
+
   ```

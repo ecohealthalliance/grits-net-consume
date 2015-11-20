@@ -8,6 +8,8 @@ _DEBUG = True
 if (_DEBUG):
     logging.getLogger().setLevel(logging.DEBUG)
 
+_DATA_DIR = '/data/'
+
 # command-line options
 _ALLOWED_FILE_EXTENSIONS = ['.tsv','.csv']
 _TYPES = ['DiioAirport', 'FlightGlobal']

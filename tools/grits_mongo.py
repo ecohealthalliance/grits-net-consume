@@ -78,7 +78,6 @@ class GritsMongoConnection(object):
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING)
             ], name="idxFlights_AirportsStopsTotalSeats")
@@ -86,7 +85,6 @@ class GritsMongoConnection(object):
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING)
             ], name="idxFlights_DepartureAirportStopsTotalSeats")
@@ -94,20 +92,17 @@ class GritsMongoConnection(object):
                 ("arrivalAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING)
             ], name="idxFlights_ArrivalAirportStopsTotalSeats")
         flights.create_index([
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING)
             ], name="idxFlights_Stops")
         flights.create_index([
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING)
             ], name="idxFlights_TotalSeats")
 
@@ -116,7 +111,6 @@ class GritsMongoConnection(object):
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING),
                 ("weeklyFrequency", pymongo.ASCENDING)
@@ -125,7 +119,6 @@ class GritsMongoConnection(object):
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING),
                 ("weeklyFrequency", pymongo.ASCENDING)
@@ -134,7 +127,6 @@ class GritsMongoConnection(object):
                 ("arrivalAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING),
                 ("weeklyFrequency", pymongo.ASCENDING)
@@ -142,14 +134,12 @@ class GritsMongoConnection(object):
         flights.create_index([
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("stops", pymongo.ASCENDING),
                 ("weeklyFrequency", pymongo.ASCENDING)
             ], name="idxFlights_StopsWeeklyFrequency")
         flights.create_index([
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
                 ("totalSeats", pymongo.ASCENDING),
                 ("weeklyFrequency", pymongo.ASCENDING)
             ], name="idxFlights_TotalSeatsWeeklyFrequency")
@@ -157,13 +147,7 @@ class GritsMongoConnection(object):
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),
                 ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING)
             ], name="idxFlights_Default")
-        flights.create_index([
-                ("discontinuedDate", pymongo.ASCENDING),
-                ("effectiveDate", pymongo.ASCENDING),
-                ("flightNumber", pymongo.ASCENDING),
-            ], name="idxFlights_FlightNumber")
 
         return "Indexes have been applied."
 

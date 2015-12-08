@@ -48,6 +48,7 @@ class GritsMongoConnection(object):
     def ensure_indexes(self, *args):
         """ creates indexes on the collections if they do not exist """
         airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
+        airports.create_index([("loc", pymongo.GEOSPHERE)])
         airports.create_index([
 				("_id", pymongo.ASCENDING),
 				("name", pymongo.TEXT),

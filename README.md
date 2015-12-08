@@ -36,7 +36,7 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 
 ### Environment variables
 Environment variables may be used for [MONGO_HOST, MONTO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD].
-Note:  these will override any value set within settings.py but not arguments to the program ex. -m
+Note:  these will override any value set within settings.py but not arguments to the program
 
 Ex: `~/git/grits-net-consume$ MONGO_HOST='10.0.1.2' python grits_consume.py` 
 

@@ -21,7 +21,7 @@ if __name__ == '__main__':
             latest_csv = max(glob.iglob(data_dir + '*.[Cc][Ss][Vv]'), key=os.path.getctime)
         except Exception as e:
             logging.error(e)
-            logging.error('Have you run the FTP upload?')
+            logging.error('Have you run the FTP download?')
             sys.exit(1)
         return lastest_csv
     

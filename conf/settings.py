@@ -1,4 +1,5 @@
 import logging
+import os
 
 # Application constants
 
@@ -33,9 +34,25 @@ _NODES = 5
 _THREADING_ENABLED = True
 
 # default command-line options
-_MONGO_HOST = 'localhost'
-_MONGO_DATABASE = 'grits'
+# Allow environment variables for MONGO_HOST, MONGO_DATABASE, MONGO_USERNAME,
+# and MONGO_PASSWORD to override these settings
+if 'MONGO_HOST' in os.environ:
+    _MONGO_HOST = os.environ['MONGO_HOST']
+else:
+    _MONGO_HOST = 'localhost'
 
-_MONGO_USERNAME = None
-# Warning: this will be stored in plain-text
-_MONGO_PASSWORD = None
+if 'MONGO_DATABASE' in os.environ:
+    _MONGO_DATABASE = os.environ['MONGO_DATABASE']
+else:
+    _MONGO_DATABASE = 'grits'
+
+if 'MONGO_USERNAME' in os.environ:
+    _MONGO_USERNAME = os.environ['MONGO_USERNAME']
+else:
+    _MONGO_USERNAME = None
+
+if 'MONGO_PASSWORD' in os.environ:
+    _MONGO_PASSWORD = os.environ['MONGO_PASSWORD']
+else:
+    #Warning: setting _MONGO_PASSWORD here will be saved as plain-text
+    _MONGO_PASSWORD = None

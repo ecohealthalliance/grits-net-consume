@@ -32,6 +32,30 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 
   ``` pip install -r requirements.txt```
 
+## default settings
+
+User defined settings may be set within `conf/settings.py`, which include:
+
+  ```
+  _DEBUG #boolean, true enables logging.debug messages
+  _DATA_DIR #string, location of the FTP downloaded files ex '/data/'
+  _ALLOWED_FILE_EXTENSIONS #array, allowed extensions for data files ex. ['.tsv','.csv']
+  _TYPES = #array, types of data files ex. ['DiioAirport', 'FlightGlobal']
+  _STRFTIME_FORMAT #string, default strftime format for a records date field ex. '%b %Y'
+  _AIRPORT_COLLECTION_NAME #string, mongodb collection names ex. 'airports'
+  _FLIGHT_COLLECTION_NAME #string, mongodb collection names ex. 'flights'
+  _INVALID_RECORD_COLLECTION_NAME #string, mongodb collection names ex. 'invalidRecords'
+  _DISABLE_SCHEMA_MATCH #boolean, raise exception for headers not in the schema?
+  _CHUNK_SIZE #integer, number of lines to split the input file
+  _NODES #integer, number of threads to launch
+  _THREADING_ENABLED #boolean, true enables multi-threading
+  _MONGO_HOST #string, default command-line option for when -m is not specified ex. 'localhost'
+  _MONGO_DATABASE #string, default command-line option for when -d is not specified ex. 'grits'
+  _MONGO_USERNAME #string or None, default command-line option for when -u is not specified ex. None
+  # Warning: this will be stored in plain-text
+  _MONGO_PASSWORD #string or None, default command-line option for when -p is not specified ex. None
+  ```
+
 ## test
   ``` nosetests ```
 

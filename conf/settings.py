@@ -31,3 +31,11 @@ _CHUNK_SIZE = 5000
 # threading?
 _NODES = 5
 _THREADING_ENABLED = True
+
+# default command-line options
+_MONGO_HOST = 'localhost'
+_MONGO_DATABASE = 'grits'
+
+_MONGO_USERNAME = None
+# Warning: this will be stored in plain-text
+_MONGO_PASSWORD = None

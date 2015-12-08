@@ -85,19 +85,19 @@ class GritsConsumer(object):
             help='the type of provider to be parsed')
 
         self.parser.add_argument('-u', '--username',
-            default=None,
+            default=settings._MONGO_USERNAME,
             help='the username for mongoDB (Default: None)')
 
         self.parser.add_argument('-p', '--password',
-            default=None,
+            default=settings._MONGO_PASSWORD,
             help='the password for mongoDB (Default: None)')
 
         self.parser.add_argument('-d', '--database',
-            default='grits',
+            default=settings._MONGO_DATABASE,
             help='the database for mongoDB (Default: grits)')
 
         self.parser.add_argument('-m', '--mongohost',
-            default='localhost',
+            default=settings._MONGO_HOST,
             help='the hostname for mongoDB (Default: localhost)')
 
         self.parser.add_argument('infile',

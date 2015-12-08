@@ -4,7 +4,7 @@
 A Python script to parse the transport network information in the provided format and load it into
 MongoDB with geospatial indexing.
 
-## prerequisites
+## Prerequisites
 
 ##### Machintosh OS X
   - Xcode
@@ -18,7 +18,7 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
  - python-dev (2.7.10)
  - python-setuptools
 
-## install
+## Install
 
 1. setup virtualenv
 
@@ -32,7 +32,15 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 
   ``` pip install -r requirements.txt```
 
-## default settings
+## User Defined Settings
+
+### Environment variables
+Environment variables may be used for [MONGO_HOST, MONTO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD].
+Note:  these will override any value set within settings.py but not arguments to the program ex. -m
+
+Ex: `~/git/grits-net-consume$ MONGO_HOST='10.0.1.2' python grits_consume.py` 
+
+### settings.py
 
 User defined settings may be set within `conf/settings.py`, which include:
 
@@ -56,10 +64,10 @@ User defined settings may be set within `conf/settings.py`, which include:
   _MONGO_PASSWORD #string or None, default command-line option for when -p is not specified ex. None
   ```
 
-## test
+## Test
   ``` nosetests ```
 
-## run
+## Run
 
 1. Upsert airport data (NOTE: This would be done a periodic basis, such as once
    a month.  However, it must be done at least once prior to running the flight
@@ -86,7 +94,7 @@ User defined settings may be set within `conf/settings.py`, which include:
   python grits_ensure_index.py
   ```
 
-## program options
+## Program Options
 
   ```
 	usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]

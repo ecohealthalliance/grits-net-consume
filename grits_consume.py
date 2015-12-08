@@ -2,6 +2,7 @@
 import os
 import sys
 import glob
+import logging
 
 from conf import settings
 from tools.grits_consumer import GritsConsumer
@@ -14,8 +15,15 @@ if __name__ == '__main__':
     
     def get_lastest_csv():
         """ get the most recent filename, sorted by date with extension .csv """
+        latest_csv = None
         data_dir = os.path.join(os.getcwd() + settings._DATA_DIR)
-        return max(glob.iglob(data_dir + '*.[Cc][Ss][Vv]'), key=os.path.getctime)
+        try:
+            latest_csv = max(glob.iglob(data_dir + '*.[Cc][Ss][Vv]'), key=os.path.getctime)
+        except Exception as e:
+            logging.error(e)
+            logging.error('Have you run the FTP upload?')
+            sys.exit(1)
+        return lastest_csv
     
     if len(sys.argv) <= 1:
         lastest_csv = get_lastest_csv()

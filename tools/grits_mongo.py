@@ -73,6 +73,7 @@ class GritsMongoConnection(object):
         flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
         flights.create_index([("departureAirport.loc", pymongo.GEOSPHERE)])
         flights.create_index([("arrivalAirport.loc", pymongo.GEOSPHERE)])
+        flights.create_index([("effectiveDate", pymongo.ASCENDING)])
         flights.create_index([            
                 ("arrivalAirport._id", pymongo.ASCENDING),
                 ("departureAirport._id", pymongo.ASCENDING),

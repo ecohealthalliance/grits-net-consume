@@ -4,7 +4,7 @@
 A Python script to parse the transport network information in the provided format and load it into
 MongoDB with geospatial indexing.
 
-## prerequisites
+## Prerequisites
 
 ##### Machintosh OS X
   - Xcode
@@ -18,7 +18,7 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
  - python-dev (2.7.10)
  - python-setuptools
 
-## install
+## Install
 
 1. setup virtualenv
 
@@ -32,10 +32,42 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
 
   ``` pip install -r requirements.txt```
 
-## test
+## User Defined Settings
+
+### Environment variables
+Environment variables may be used for [MONGO_HOST, MONGO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD].
+Note:  these will override any value set within settings.py but not arguments to the program
+
+Ex: `~/git/grits-net-consume$ MONGO_HOST='10.0.1.2' python grits_consume.py` 
+
+### settings.py
+
+User defined settings may be set within `conf/settings.py`, which include:
+
+  ```
+  _DEBUG #boolean, true enables logging.debug messages
+  _DATA_DIR #string, location of the FTP downloaded files ex '/data/'
+  _ALLOWED_FILE_EXTENSIONS #array, allowed extensions for data files ex. ['.tsv','.csv']
+  _TYPES = #array, types of data files ex. ['DiioAirport', 'FlightGlobal']
+  _STRFTIME_FORMAT #string, default strftime format for a records date field ex. '%b %Y'
+  _AIRPORT_COLLECTION_NAME #string, mongodb collection names ex. 'airports'
+  _FLIGHT_COLLECTION_NAME #string, mongodb collection names ex. 'flights'
+  _INVALID_RECORD_COLLECTION_NAME #string, mongodb collection names ex. 'invalidRecords'
+  _DISABLE_SCHEMA_MATCH #boolean, raise exception for headers not in the schema?
+  _CHUNK_SIZE #integer, number of lines to split the input file
+  _NODES #integer, number of threads to launch
+  _THREADING_ENABLED #boolean, true enables multi-threading
+  _MONGO_HOST #string, default command-line option for when -m is not specified ex. 'localhost'
+  _MONGO_DATABASE #string, default command-line option for when -d is not specified ex. 'grits'
+  _MONGO_USERNAME #string or None, default command-line option for when -u is not specified ex. None
+  # Warning: this will be stored in plain-text
+  _MONGO_PASSWORD #string or None, default command-line option for when -p is not specified ex. None
+  ```
+
+## Test
   ``` nosetests ```
 
-## run
+## Run
 
 1. Upsert airport data (NOTE: This would be done a periodic basis, such as once
    a month.  However, it must be done at least once prior to running the flight
@@ -62,7 +94,7 @@ See the following guide: http://docs.python-guide.org/en/latest/starting/install
   python grits_ensure_index.py
   ```
 
-## program options
+## Program Options
 
   ```
 	usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]

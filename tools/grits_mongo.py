@@ -45,8 +45,19 @@ class GritsMongoConnection(object):
         self._client = pymongo.MongoClient(uri)
         return pymongo.database.Database(self._client, self._database)
 
+    def drop_indexes(self):
+        """ drops any existing indexes"""
+        airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
+        airports.drop_indexes()
+        flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
+        flights.drop_indexes()
+
     def ensure_indexes(self, *args):
         """ creates indexes on the collections if they do not exist """
+        # drop indexes by default
+        self.drop_indexes()
+
+        # recreates the indexes
         airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
         airports.create_index([("loc", pymongo.GEOSPHERE)])
         airports.create_index([

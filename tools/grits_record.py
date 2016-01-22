@@ -426,7 +426,7 @@ class FlightRecord(Record):
             #'economyClassSeats' : { 'type': 'integer', 'nullable': True},
             #'aircraftTonnage' : { 'type': 'integer', 'nullable': True}}
 
-    def __init__(self, header_row, provider_map, collection_name, row_count, mongo_connection):
+    def __init__(self, header_row, provider_map, collection_name, row_count, airports):
         """ FlightRecord constructor
 
             Parameters
@@ -447,7 +447,7 @@ class FlightRecord(Record):
         self.provider_map_keys_lower = map(lambda x: x.lower(), provider_map.keys())
         self.collection_name = collection_name
         self.row_count = row_count
-        self.mongo_connection = mongo_connection
+        self.airports = airports
         self.validator = Validator(self.schema, transparent_schema_rules=True)
 
     def gen_key(self):
@@ -487,6 +487,15 @@ class FlightRecord(Record):
                     weeklyFrequency += 1
 
         return weeklyFrequency
+
+    def find_airport(self, _id):
+        """ this is faster than a lambda """
+        airport = None
+        for a in self.airports:
+            if a['_id'] == _id:
+                airport = a
+                break
+        return airport
 
     def create(self, row):
         """ populate the fields with the row data
@@ -534,9 +543,7 @@ class FlightRecord(Record):
 
             # special cases to convert to geoJSON
             if header.lower() == 'departureairport' or header.lower() == 'arrivalairport':
-                db = self.mongo_connection.db
-                airport = db[settings._AIRPORT_COLLECTION_NAME].find_one({'_id':field})
-                self.fields[header] = airport
+                self.fields[header] = self.find_airport(field)
                 continue
 
             # special case for stopCodes
@@ -544,7 +551,7 @@ class FlightRecord(Record):
                 codes = field.split('!')
                 airports = []
                 for code in codes:
-                    airport = db[settings._AIRPORT_COLLECTION_NAME].find_one({'_id':code})
+                    airport = self.find_airport(field)
                     if airport != None: airports.append(airport)
                 self.fields[header] = airports
 
@@ -575,14 +582,13 @@ class AirportRecord(Record):
             'WAC': { 'type': 'integer', 'nullable': True},
             'notes': { 'type': 'string', 'nullable': True}}
 
-    def __init__(self, header_row, provider_map, collection_name, row_count, mongo_connection):
+    def __init__(self, header_row, provider_map, collection_name, row_count):
         super(AirportRecord, self).__init__()
         self.header_row = header_row
         self.provider_map = provider_map
         self.provider_map_keys_lower = map(lambda x: x.lower(), provider_map.keys())
         self.collection_name = collection_name
         self.row_count = row_count
-        self.mongo_connection = mongo_connection
         self.validator = Validator(self.schema)
 
     @staticmethod

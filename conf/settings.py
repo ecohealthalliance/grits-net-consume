@@ -30,8 +30,17 @@ _DISABLE_SCHEMA_MATCH = True #raise exception for headers not in the schema?
 _CHUNK_SIZE = 5000
 
 # threading?
-_NODES = 5
-_THREADING_ENABLED = True
+_NODES = 3
+_THREADING_ENABLED = False
+
+# multiprocessing?
+_MULTIPROCESSING_ENABLED = True
+
+# drop indexes?  Setting this to 'true' will drop any existing indexes in the
+# database.  This is most likely desirable, as bulk upserts should be faster
+# without any indexes on the collection.  However, it is important to remember
+# to then build the indexes through grits_ensure_index.py
+_DROP_INDEXES = True
 
 # default command-line options
 # Allow environment variables for MONGO_HOST, MONGO_DATABASE, MONGO_USERNAME,

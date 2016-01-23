@@ -85,54 +85,57 @@ class GritsFileReader:
         self.find_header(reader)
 
         if settings._MULTIPROCESSING_ENABLED:
-            ppool = ProcessingPool(nodes=settings._NODES)
             chunks = []
-
-        if settings._THREADING_ENABLED:
-            tpool = ThreadPool(nodes=settings._NODES)
-
+        
         start = time.time()*1000.0
+        count = 0
         for chunk in GritsFileReader.gen_chunks(reader, airports):
-            # collections of valid and invaid records to be batch upsert / insert many
-            valid_records = []
-            invalid_records = []
-            chunk_start = time.time()*1000.0
+            count += 1
             # is multiprocessing enabled? processing time may increase if the
             # file is read into memory and processing is done by multiple
             # processors
             if settings._MULTIPROCESSING_ENABLED:
-                chunks.append(chunk)
+                chunks.append(list(chunk))
+                if not count % settings._CORES:
+                    self.multiprocess_chunks(chunks, mongo_connection)
+                    # reset the chunks array
+                    chunks = []
             # is threading enabled?  this may increase performance when mongoDB
             # is not running on localhost due to busy wait on finding an airport
             # in the case of FlightGlobalType.
             elif settings._THREADING_ENABLED:
-                results = tpool.amap(self.process_row, chunk)
-                while not results.ready():
-                    # command-line spinner
-                    for cursor in '|/-\\':
-                        sys.stdout.write('\b%s' % cursor)
-                        sys.stdout.flush()
-                        time.sleep(.25)
-                sys.stdout.write('\b')
-                sys.stdout.flush()
-                # async-poll is done, get the results
-                result = results.get()
-                if result:
-                    valid_records = [ x[0] for x in result if x[0] is not None ]
-                    invalid_records = [ x[1] for x in result if x[1] is not None ]
-                    logging.debug('t-finish: %r', (time.time()*1000.0)-chunk_start)
-                    self.bulk_upsert(valid_records, invalid_records, mongo_connection)
+                self.threadprocess_chunk(chunk, mongo_connection)
             # single-threaded synchronous processing
             else:
-                for data in chunk:
-                    valid, invalid = self.process_row(data)
-                    if valid != None: valid_records.append(valid)
-                    if invalid != None: invalid_records.append(invalid)
-                logging.debug('s-finish: %r', (time.time()*1000.0)-chunk_start)
-                self.bulk_upsert(valid_records, invalid_records, mongo_connection)
+                self.syncprocess_chunk(chunk, mongo_connection)
 
         if settings._MULTIPROCESSING_ENABLED:
-            results = ppool.amap(self.process_chunk, chunks)
+            self.multiprocess_chunks(chunks, mongo_connection)
+        logging.debug('all-finish: %r', (time.time()*1000.0)-start)
+
+    def multiprocess_chunk(self, chunk):
+        """ during multiprocessing, each cpu will process of chunk of data """
+        results = []
+        for row in chunk:
+            results.append(self.process_row(row))
+        return results
+
+    def multiprocess_chunks(self, chunks, mongo_connection):
+        # collections of valid and invaid records to be batch upsert / insert many
+        valid_records = []
+        invalid_records = []
+        if len(chunks) <= 0:
+            return
+        if len(chunks) == 1:
+            self.syncprocess_chunk(chunks[0], mongo_connection)
+            return
+        if settings._CORES == 1:
+            self.syncprocess_chunk(chunks[0], mongo_connection)
+            return
+        if len(chunks) > 1:
+            logging.debug('multiprocessing [%r] chunks', len(chunks))
+            ppool = ProcessingPool(nodes=settings._CORES)
+            results = ppool.amap(self.multiprocess_chunk, chunks)
             while not results.ready():
                 # command-line spinner
                 for cursor in '|/-\\':
@@ -142,21 +145,43 @@ class GritsFileReader:
             sys.stdout.write('\b')
             sys.stdout.flush()
             result = results.get()
-            if result:
-                records = [ x[0] for x in result if x[0] is not None ]
-                valid_records = [ x[0] for x in records if x[0] is not None ]
-                invalid_records = [ x[1] for x in records if x[1] is not None ]
-                self.bulk_upsert(valid_records, invalid_records, mongo_connection)
+            if len(result) > 0:
+                for chunk_result in result:
+                    valid_records = [ x[0] for x in chunk_result if x[0] is not None ]
+                    invalid_records = [ x[1] for x in chunk_result if x[1] is not None ]
+                    self.bulk_upsert(valid_records, invalid_records, mongo_connection)
 
-        logging.debug('all-finish: %r', (time.time()*1000.0)-start)
+    def threadprocess_chunk(self, chunk, mongo_connection):
+        # collections of valid and invaid records to be batch upsert / insert many
+        valid_records = []
+        invalid_records = []
+        tpool = ThreadPool(nodes=settings._THREADS)
+        results = tpool.amap(self.process_row, chunk)
+        while not results.ready():
+            # command-line spinner
+            for cursor in '|/-\\':
+                sys.stdout.write('\b%s' % cursor)
+                sys.stdout.flush()
+                time.sleep(.25)
+        sys.stdout.write('\b')
+        sys.stdout.flush()
+        # async-poll is done, get the results
+        result = results.get()
+        if result:
+            valid_records = [ x[0] for x in result if x[0] is not None ]
+            invalid_records = [ x[1] for x in result if x[1] is not None ]
+            self.bulk_upsert(valid_records, invalid_records, mongo_connection)
 
-    def process_chunk(self, chunk):
-        """ during multiprocessing, each cpu will process of chunk of data """
-        results = []
-        for row in chunk:
-            results.append(self.process_row(row))
-        return results
-
+    def syncprocess_chunk(self, chunk, mongo_connection):
+        # collections of valid and invaid records to be batch upsert / insert many
+        valid_records = []
+        invalid_records = []
+        for data in chunk:
+            valid, invalid = self.process_row(data)
+            if valid != None: valid_records.append(valid)
+            if invalid != None: invalid_records.append(invalid)
+        self.bulk_upsert(valid_records, invalid_records, mongo_connection)
+                
     def process_row(self, args):
         """ process each row according to the record type contract
 
@@ -188,7 +213,7 @@ class GritsFileReader:
 
                 # create the record
                 record.create(row)
-
+                
                 # validate
                 if record.validate():
                     return [record,None]

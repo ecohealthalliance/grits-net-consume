@@ -27,9 +27,9 @@ _INVALID_RECORD_COLLECTION_NAME = 'invalidRecords'
 # schema
 _DISABLE_SCHEMA_MATCH = True #raise exception for headers not in the schema?
 
-# number of lines to split the file, multiprocessing will be faster the
+# number of lines to split the file, multiprocessing may be faster the
 # higher this is set but it will also consume more memory
-_CHUNK_SIZE = 10000
+_CHUNK_SIZE = 5000
 
 # threading? threading spawns treads but is limited by the Python global
 # interpreter lock (GIL)

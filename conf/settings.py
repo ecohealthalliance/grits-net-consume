@@ -31,11 +31,12 @@ _DISABLE_SCHEMA_MATCH = True #raise exception for headers not in the schema?
 # higher this is set but it will also consume more memory
 _CHUNK_SIZE = 10000
 
-# threading?
+# threading? threading spawns treads but is limited by the Python global
+# interpreter lock (GIL)
 _THREADING_ENABLED = False
 _THREADS = 5
 
-# multiprocessing?
+# multiprocessing? multiprocessing uses multiple cpu cores to distribute work
 _MULTIPROCESSING_ENABLED = True
 if multiprocessing.cpu_count() > 1:
     _CORES = multiprocessing.cpu_count() - 1

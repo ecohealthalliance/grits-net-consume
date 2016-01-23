@@ -582,7 +582,7 @@ class AirportRecord(Record):
             'WAC': { 'type': 'integer', 'nullable': True},
             'notes': { 'type': 'string', 'nullable': True}}
 
-    def __init__(self, header_row, provider_map, collection_name, row_count):
+    def __init__(self, header_row, provider_map, collection_name, row_count, airports):
         super(AirportRecord, self).__init__()
         self.header_row = header_row
         self.provider_map = provider_map

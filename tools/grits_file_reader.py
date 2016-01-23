@@ -181,7 +181,7 @@ class GritsFileReader:
             if valid != None: valid_records.append(valid)
             if invalid != None: invalid_records.append(invalid)
         self.bulk_upsert(valid_records, invalid_records, mongo_connection)
-                
+
     def process_row(self, args):
         """ process each row according to the record type contract
 

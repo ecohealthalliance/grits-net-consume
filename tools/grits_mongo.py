@@ -29,6 +29,8 @@ class GritsMongoConnection(object):
         self._database = program_arguments.database
         self._client = None
         self._db = self.connect()
+        if settings._DROP_INDEXES:
+            self.drop_indexes()
 
     def connect(self):
         """ connect to mongoDB
@@ -44,6 +46,13 @@ class GritsMongoConnection(object):
                 (self._hostname, self._database)
         self._client = pymongo.MongoClient(uri)
         return pymongo.database.Database(self._client, self._database)
+
+    def drop_indexes(self):
+        """ drops any existing indexes"""
+        airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
+        airports.drop_indexes()
+        flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
+        flights.drop_indexes()
 
     def ensure_indexes(self, *args):
         """ creates indexes on the collections if they do not exist """

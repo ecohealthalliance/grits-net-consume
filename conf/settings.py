@@ -31,7 +31,7 @@ _CHUNK_SIZE = 5000
 
 # threading?
 _NODES = 5
-_THREADING_ENABLED = True
+_THREADING_ENABLED = False
 
 # drop indexes?  Setting this to 'true' will drop any existing indexes in the
 # database.  This is most likely desirable, as bulk upserts should be faster

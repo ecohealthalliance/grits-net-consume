@@ -135,7 +135,6 @@ class GritsMongoConnection(object):
 
         return formatted_result
 
-
     def bulk_upsert(self, collection_name, records):
         """ bulk upsert of documents into mongodb collection
 

@@ -4,9 +4,10 @@ import hashlib
 import logging
 
 from datetime import datetime
+from datetime import timedelta
 from cerberus import Validator
 from bson import json_util
-
+from math import radians, sin, cos, asin, sqrt
 from conf import settings
 
 class InvalidRecordProperty(Exception):
@@ -366,7 +367,7 @@ class FlightRecord(Record):
             'departureCountry' : { 'type': 'string', 'nullable': True},
             'departureTimePub' : { 'type': 'string', 'nullable': True},
             #'departureTimeActual' : { 'type': 'datetime', 'nullable': True, 'datetime_format': '%H:%M:%S'},
-            'departureUTCVariance' : { 'type': 'integer', 'nullable': True},
+            'departureUTCVariance' : { 'type': 'string', 'nullable': True},
             #'departureTerminal' : { 'type': 'string', 'nullable': True},
             'arrivalAirport' : { 'type': 'dict', 'nullable': False, 'required': True},
             'arrivalCity' : { 'type': 'string', 'nullable': True},
@@ -374,16 +375,22 @@ class FlightRecord(Record):
             'arrivalCountry' : { 'type': 'string', 'nullable': True},
             'arrivalTimePub' : { 'type': 'string', 'nullable': True},
             #'arrivalTimeActual' : { 'type': 'datetime', 'nullable': True, 'datetime_format': '%H:%M:%S'},
-            'arrivalUTCVariance' : { 'type': 'integer', 'nullable': True},
+            'arrivalUTCVariance' : { 'type': 'string', 'nullable': True},
             #'arrivalTerminal' : { 'type': 'string', 'nullable': True},
             #'subAircraftCode' : { 'type': 'string', 'nullable': True},
             #'groupAircraftCode' : { 'type': 'string', 'nullable': True},
             #'classes' : { 'type': 'string', 'nullable': True},
             #'classesFull' : { 'type': 'string', 'nullable': True},
             #'trafficRestriction' : { 'type': 'string', 'nullable': True},
-            'flightArrivalDayIndicator' : { 'type': 'string', 'nullable': True},
+            'flightArrivalDayIndicator' : { 'type': 'integer', 'nullable': True},
             'stops' : { 'type': 'integer', 'nullable': True},
             'stopCodes' : { 'type': 'list', 'nullable': True},
+            'legs' : { 'type': 'list', 'schema': {
+                    'departureAirport': { 'type': 'dict', 'nullable': False, 'required': True},
+                    'arrivalAirport': { 'type': 'dict', 'nullable': False, 'required': True},
+                    'distance': {'type': 'number', 'required': True},
+                    'time': {'type': 'number', 'required': True},
+                }, 'nullable': True, 'calculated': True},
             #'stopRestrictions' : { 'type': 'string', 'nullable': True},
             #'stopsubAircraftCodes' : { 'type': 'integer', 'nullable': True},
             #'aircraftChangeIndicator' : { 'type': 'string', 'nullable': True},
@@ -404,7 +411,7 @@ class FlightRecord(Record):
             #'recordId' : { 'type': 'integer', 'nullable': True},
             #'daysOfOperation' : { 'type': 'string', 'nullable': True},
             #'totalFrequency' : { 'type': 'integer', 'nullable': True},
-            'weeklyFrequency' : { 'type': 'integer', 'nullable': True, 'required': False},
+            'weeklyFrequency' : { 'type': 'integer', 'required': True, 'calculated': True},
             #'availSeatMi' : { 'type': 'integer', 'nullable': True},
             #'availSeatKm' : { 'type': 'integer', 'nullable': True},
             #'intStopArrivaltime' : { 'type': 'list', 'nullable': True},
@@ -419,6 +426,8 @@ class FlightRecord(Record):
             #'arrivalCountryName' : { 'type': 'string', 'nullable': True},
             #'aircraftType' : { 'type': 'string', 'nullable': True},
             #'carrierName' : { 'type': 'string', 'nullable': True},
+            'totalDistance': { 'type': 'number', 'required': True, 'calculated': True},
+            'totalTime': { 'type': 'number', 'required': True, 'calculated': True},
             'totalSeats' : { 'type': 'integer', 'nullable': True}}
             #'firstClassSeats' : { 'type': 'integer', 'nullable': True},
             #'businessClassSeats' : { 'type': 'integer', 'nullable': True},
@@ -448,7 +457,119 @@ class FlightRecord(Record):
         self.collection_name = collection_name
         self.row_count = row_count
         self.mongo_connection = mongo_connection
+        # initial values for calculated fields
+        self.fields['weeklyFrequency'] = 0
+        self.fields['totalDistance'] = 0
+        self.fields['totalTime'] = 0
+        self.fields['legs'] = []
         self.validator = Validator(self.schema, transparent_schema_rules=True)
+
+    @staticmethod
+    def haversine(lon1, lat1, lon2, lat2):
+        """ http://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
+        Calculate the great circle distance between two points
+        on the earth (specified in decimal degrees)
+        """
+        # convert decimal degrees to radians
+        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+        # haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * asin(sqrt(a))
+        r = 3956 # Radius of earth in miles. Use 6371 for kilometers
+        return c * r
+
+    @staticmethod
+    def weighted_time_over_distance(total_distance, leg_distance, total_time):
+        if total_distance > 0:
+            return total_time - (total_time * ((total_distance - leg_distance) / total_distance))
+
+    @staticmethod
+    def parse_offset(offset):
+        if len(offset) != 5:
+            raise InvalidRecordProperty('offset "%s" is not in the required format + / - HHmm' % offset)
+        if not(offset[0] == u'+' or offset[0] == u'-'):
+            raise InvalidRecordProperty('offset "%s" is not in the required format + / - HHmm' % offset)
+        return int(offset[0:3])
+
+    @staticmethod
+    def total_distance(departure, arrival):
+        return FlightRecord.haversine(
+            departure['loc']['coordinates'][0],
+            departure['loc']['coordinates'][1],
+            arrival['loc']['coordinates'][0],
+            arrival['loc']['coordinates'][1]
+        )
+
+    @staticmethod
+    def create_leg(departure, arrival, total_distance, total_time):
+        leg_distance = FlightRecord.total_distance(departure, arrival)
+        return {
+            'departureAirport': departure,
+            'arrivalAirport': arrival,
+            'distance': leg_distance,
+            'time': FlightRecord.weighted_time_over_distance(
+                total_distance,
+                leg_distance,
+                total_time
+            )
+        }
+
+    @staticmethod
+    def elapsed_time(begin_time, begin_offset, end_time, end_offset, days_indicator):
+        """ calculate the elapsed time between times with offset and the number
+        of days """
+        # the current utc datetime
+        now = datetime.utcnow()
+        # how many clock changes occur from the tz offset
+        clock_changes = 0
+
+        # split the begin_time into HH:mm:ss
+        split = begin_time.split(':')
+        if len(split) != 3:
+            raise InvalidRecordProperty('time "%s" is not in the required format HH:mm:ss' % begin_time)
+        # hours plus the offset
+        hours = int(split[0]) + FlightRecord.parse_offset(begin_offset)
+        # if hours is less than zero, a clock change occured due to timezone
+        if hours < 0:
+            clock_changes += 1
+            hours = 24 + hours
+        # elif hours is greater then twenty-three, a clock change occured due to timezone
+        elif hours > 23:
+            clock_changes += 1
+            hours = hours - 24
+        # set the begin_date from the current utc date with the adjusted hour, minute, second
+        begin_date = now.replace(hour=hours, minute=int(split[1]), second=int(split[2]))
+
+
+        # split the end_time into HH:mm:ss
+        split = end_time.split(':')
+        if len(split) != 3:
+            raise InvalidRecordProperty('time "%s" is not in the required format HH:mm:ss' % end_time)
+        hours = int(split[0]) + FlightRecord.parse_offset(end_offset)
+        # if hours is less than zero, a clock change occured due to timezone
+        if hours < 0:
+            clock_changes += 1
+            hours = 24 + hours
+        # elif hours is greater then twenty-three, a clock change occured due to timezone
+        elif hours > 23:
+            clock_changes += 1
+            hours = hours - 24
+        # set the end_date from the current utc date with the adjusted hour, minute, second
+        end_date = now.replace(hour=hours, minute=int(split[1]), second=int(split[2]))
+
+        # how many days have elapsed not including timezone clock changes?
+        if not(days_indicator == '' or days_indicator == None):
+            total_days = days_indicator - clock_changes
+            # it total_days is a positive integer, add the total_days
+            if total_days > 0:
+                end_date = end_date + timedelta(days=total_days)
+
+        # the difference between beginning and end
+        time_delta = begin_date - end_date
+        # return the absolute value of the delta total_seconds
+        return abs(time_delta.total_seconds())
 
     def gen_key(self):
         """ generate a unique key for this record """
@@ -467,17 +588,15 @@ class FlightRecord(Record):
         h.update(self.fields['effectiveDate'].isoformat())
         h.update(str(self.fields['carrier']))
         h.update(str(self.fields['flightNumber']))
-
-        return h.hexdigest()
+        self.id = h.hexdigest()
 
     def gen_weeklyFrequency(self):
         """ generate the weeklyFrequency for this record """
-
         if len(self.fields) == 0:
-            return None
+            return
 
         if self.validator.validate(self.fields) == False:
-            return None
+            return
 
         weeklyFrequency = 0
         dayFields = ['day1','day2','day3','day4','day5','day6','day7']
@@ -485,8 +604,103 @@ class FlightRecord(Record):
             if dayField in self.fields:
                 if self.fields[dayField] == True:
                     weeklyFrequency += 1
+        self.fields.weeklyFrequency = weeklyFrequency
 
-        return weeklyFrequency
+    def gen_totalTime(self):
+        if len(self.fields) == 0:
+            return
+
+        if self.validator.validate(self.fields) == False:
+            return
+
+        begin_time = self.fields['departureTimePub']
+        begin_offset = self.fields['departureUTCVariance']
+        end_time = self.fields['arrivalTimePub']
+        end_offset = self.fields['arrivalUTCVariance']
+        days_indicator = self.fields['flightArrivalDayIndicator']
+        self.fields['totalTime'] = FlightRecord.elapsed_time(begin_time, begin_offset, end_time, end_offset, days_indicator)
+
+    def gen_totalDistance(self):
+        if len(self.fields) == 0:
+            return
+
+        if self.validator.validate(self.fields) == False:
+            return
+
+        total_distance = 0
+        if self.fields['departureAirport']['_id'] == self.fields['arrivalAirport']['_id']:
+            # edge case, we better have stops or raise invalid record error
+            if len(self.fields['stopCodes']) == 0:
+                raise InvalidRecordProperty('departureAirport and arrivalAirport are the same and without stops.')
+
+        if len(self.fields['stopCodes']) > 0:
+            previousAirport = None
+            for airport in self.fields['stopCodes']:
+                if previousAirport == None:
+                    total_distance += FlightRecord.total_distance(self.fields['departureAirport'], airport)
+                else:
+                    total_distance += FlightRecord.total_distance(previousAirport, airport)
+                previousAirport = airport
+
+            if previousAirport != None:
+                total_distance += FlightRecord.total_distance(previousAirport, self.fields['arrivalAirport'])
+        else:
+            total_distance = FlightRecord.total_distance(self.fields['departureAirport'], self.fields['arrivalAirport'])
+        self.fields['totalDistance'] = total_distance
+
+    def gen_legs(self):
+        if len(self.fields) == 0:
+            return
+
+        if self.validator.validate(self.fields) == False:
+            return
+
+        legs = []
+        if len(self.fields['stopCodes']) > 0:
+            previousAirport = None
+            for airport in self.fields['stopCodes']:
+                if previousAirport == None:
+                    legs.append(
+                        FlightRecord.create_leg(
+                            self.fields['departureAirport'],
+                            airport,
+                            self.fields['totalDistance'],
+                            self.fields['totalTime']
+                        )
+                    )
+                else:
+                    legs.append(
+                        FlightRecord.create_leg(
+                            previousAirport,
+                            airport,
+                            self.fields['totalDistance'],
+                            self.fields['totalTime'])
+                    )
+                previousAirport = airport
+            if previousAirport != None:
+                legs.append(
+                    FlightRecord.create_leg(
+                        previousAirport,
+                        self.fields['arrivalAirport'],
+                        self.fields['totalDistance'],
+                        self.fields['totalTime'])
+                )
+        else:
+            legs.append(
+                FlightRecord.create_leg(
+                    self.fields['departureAirport'],
+                    self.fields['arrivalAirport'],
+                    self.fields['totalDistance'],
+                    self.fields['totalTime'])
+            )
+        self.fields['legs'] = legs
+
+    def gen_calculated_fields(self):
+        # order matters, we need time and distance before legs
+        self.gen_weeklyFrequency()
+        self.gen_totalTime()
+        self.gen_totalDistance()
+        self.gen_legs()
 
     def create(self, row):
         """ populate the fields with the row data
@@ -551,8 +765,9 @@ class FlightRecord(Record):
             # all other cases set data-type based on schema
             self.set_field_by_schema(header, field)
 
-        self.fields['weeklyFrequency'] = self.gen_weeklyFrequency()
-        self.id = self.gen_key()
+        # calculated fields
+        self.gen_calculated_fields()
+        self.gen_key()
 
 class AirportRecord(Record):
     """ class that represents the mondoDB airport document """
@@ -608,7 +823,6 @@ class AirportRecord(Record):
             return False
 
         return True
-
 
     def create(self, row):
         """ populate the fields with the row data

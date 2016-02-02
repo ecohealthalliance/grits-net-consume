@@ -10,6 +10,8 @@ from bson import json_util
 from math import radians, sin, cos, asin, sqrt
 from conf import settings
 
+_LAYOVER_TIME = 5400
+
 class InvalidRecordProperty(Exception):
     """ custom exception that is thrown when the record is missing required
     properties """
@@ -389,7 +391,8 @@ class FlightRecord(Record):
                     'departureAirport': { 'type': 'dict', 'nullable': False, 'required': True},
                     'arrivalAirport': { 'type': 'dict', 'nullable': False, 'required': True},
                     'distance': {'type': 'number', 'required': True},
-                    'time': {'type': 'number', 'required': True},
+                    'arrivalTime': {'type': 'number', 'required': True},
+                    'departureTime': {'type': 'number', 'nullable': True, 'required': True},
                 }, 'nullable': False, 'calculated': True},
             #'stopRestrictions' : { 'type': 'string', 'nullable': True},
             #'stopsubAircraftCodes' : { 'type': 'integer', 'nullable': True},
@@ -481,9 +484,13 @@ class FlightRecord(Record):
         return c * r
 
     @staticmethod
-    def weighted_time_over_distance(total_distance, leg_distance, total_time):
+    def weighted_time_over_distance(total_distance, leg_distance, total_time, is_midpoint):
         if total_distance > 0:
-            return total_time - (total_time * ((total_distance - leg_distance) / total_distance))
+            t = total_time - (total_time * ((total_distance - leg_distance) / total_distance))
+            if is_midpoint:
+                return [t - (_LAYOVER_TIME/2), t + (_LAYOVER_TIME/2)]
+            else:
+                return t
         else:
             return 0
 
@@ -505,18 +512,45 @@ class FlightRecord(Record):
         )
 
     @staticmethod
-    def create_leg(departure, arrival, total_distance, total_time):
+    def create_leg(departure, arrival, total_distance, total_time, is_midpoint):
         leg_distance = FlightRecord.total_distance(departure, arrival)
-        return {
-            'departureAirport': departure,
-            'arrivalAirport': arrival,
-            'distance': leg_distance,
-            'time': FlightRecord.weighted_time_over_distance(
-                total_distance,
-                leg_distance,
-                total_time
-            )
-        }
+        if leg_distance == total_distance:
+            return {
+                'departureAirport': departure,
+                'arrivalAirport': arrival,
+                'distance': total_distance,
+                'arrivalTime': total_time,
+                'departureTime': 0.0
+            }
+        else:
+            if is_midpoint:
+                weighted_time = FlightRecord.weighted_time_over_distance(
+                    total_distance,
+                    leg_distance,
+                    total_time,
+                    True
+                )
+                return {
+                    'departureAirport': departure,
+                    'arrivalAirport': arrival,
+                    'distance': leg_distance,
+                    'arrivalTime': weighted_time[0],
+                    'departureTime': weighted_time[1]
+                }
+            else:
+                weighted_time = FlightRecord.weighted_time_over_distance(
+                    total_distance,
+                    leg_distance,
+                    total_time,
+                    False
+                )
+                return {
+                    'departureAirport': departure,
+                    'arrivalAirport': arrival,
+                    'distance': leg_distance,
+                    'arrivalTime': weighted_time,
+                    'departureTime': None
+                }
 
     @staticmethod
     def elapsed_time(begin_time, begin_offset, end_time, end_offset, days_indicator):
@@ -532,7 +566,7 @@ class FlightRecord(Record):
         if len(split) != 3:
             raise InvalidRecordProperty('time "%s" is not in the required format HH:mm:ss' % begin_time)
         # hours plus the offset
-        hours = int(split[0]) + FlightRecord.parse_offset(begin_offset)
+        hours = int(split[0]) - FlightRecord.parse_offset(begin_offset)
         # if hours is less than zero, a clock change occured due to timezone
         if hours < 0:
             clock_changes += 1
@@ -544,12 +578,11 @@ class FlightRecord(Record):
         # set the begin_date from the current utc date with the adjusted hour, minute, second
         begin_date = now.replace(hour=hours, minute=int(split[1]), second=int(split[2]))
 
-
         # split the end_time into HH:mm:ss
         split = end_time.split(':')
         if len(split) != 3:
             raise InvalidRecordProperty('time "%s" is not in the required format HH:mm:ss' % end_time)
-        hours = int(split[0]) + FlightRecord.parse_offset(end_offset)
+        hours = int(split[0]) - FlightRecord.parse_offset(end_offset)
         # if hours is less than zero, a clock change occured due to timezone
         if hours < 0:
             clock_changes += 1
@@ -670,7 +703,8 @@ class FlightRecord(Record):
                             self.fields['departureAirport'],
                             airport,
                             self.fields['totalDistance'],
-                            self.fields['totalTime']
+                            self.fields['totalTime'],
+                            False
                         )
                     )
                 else:
@@ -679,7 +713,9 @@ class FlightRecord(Record):
                             previousAirport,
                             airport,
                             self.fields['totalDistance'],
-                            self.fields['totalTime'])
+                            self.fields['totalTime'],
+                            True
+                        )
                     )
                 previousAirport = airport
             if previousAirport != None:
@@ -688,7 +724,9 @@ class FlightRecord(Record):
                         previousAirport,
                         self.fields['arrivalAirport'],
                         self.fields['totalDistance'],
-                        self.fields['totalTime'])
+                        self.fields['totalTime'],
+                        False
+                    )
                 )
         else:
             legs.append(
@@ -696,7 +734,9 @@ class FlightRecord(Record):
                     self.fields['departureAirport'],
                     self.fields['arrivalAirport'],
                     self.fields['totalDistance'],
-                    self.fields['totalTime'])
+                    self.fields['totalTime'],
+                    False
+                )
             )
         self.fields['legs'] = legs
 

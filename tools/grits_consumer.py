@@ -107,12 +107,12 @@ class GritsConsumer(object):
     def run(self, *args):
         """ kickoff the program """
         self.add_args()
-        
+
         if len(args) > 0:
             program_args = self.parser.parse_args(args)
         else:
             program_args = self.parser.parse_args()
-                
+
         # validate the filename extension
         if not self.is_valid_file_type(program_args.infile):
             msg = 'not a valid file extension %r' % settings._ALLOWED_FILE_EXTENSIONS
@@ -122,17 +122,16 @@ class GritsConsumer(object):
             report_type = DiioAirportType()
         else :
             report_type = FlightGlobalType()
-        
-        # setup the mongoDB connection
+
+        # setup a mongoDB connection
         mongo_connection = GritsMongoConnection(program_args)
-        
+
         # check if the airport import has been run first
         if type(report_type) == FlightGlobalType:
-            db = mongo_connection.db;
-            num_airports = db[settings._AIRPORT_COLLECTION_NAME].find().count();
+            num_airports = mongo_connection.db[settings._AIRPORT_COLLECTION_NAME].find().count()
             if num_airports == 0:
                 raise MissingRecords('Please import the type DiioAirport before FlightGlobal')
-        
+
         # create a new file reader object of the specified report type
         reader = GritsFileReader(report_type, program_args)
-        reader.process(mongo_connection)
+        reader.process()

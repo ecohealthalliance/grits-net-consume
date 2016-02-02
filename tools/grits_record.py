@@ -390,7 +390,7 @@ class FlightRecord(Record):
                     'arrivalAirport': { 'type': 'dict', 'nullable': False, 'required': True},
                     'distance': {'type': 'number', 'required': True},
                     'time': {'type': 'number', 'required': True},
-                }, 'nullable': True, 'calculated': True},
+                }, 'nullable': False, 'calculated': True},
             #'stopRestrictions' : { 'type': 'string', 'nullable': True},
             #'stopsubAircraftCodes' : { 'type': 'integer', 'nullable': True},
             #'aircraftChangeIndicator' : { 'type': 'string', 'nullable': True},
@@ -426,8 +426,8 @@ class FlightRecord(Record):
             #'arrivalCountryName' : { 'type': 'string', 'nullable': True},
             #'aircraftType' : { 'type': 'string', 'nullable': True},
             #'carrierName' : { 'type': 'string', 'nullable': True},
-            'totalDistance': { 'type': 'number', 'required': True, 'calculated': True},
-            'totalTime': { 'type': 'number', 'required': True, 'calculated': True},
+            'totalDistance': { 'type': 'number', 'required': True, 'nullable': False, 'calculated': True},
+            'totalTime': { 'type': 'number', 'required': True, 'nullable': False, 'calculated': True},
             'totalSeats' : { 'type': 'integer', 'nullable': True}}
             #'firstClassSeats' : { 'type': 'integer', 'nullable': True},
             #'businessClassSeats' : { 'type': 'integer', 'nullable': True},
@@ -484,6 +484,8 @@ class FlightRecord(Record):
     def weighted_time_over_distance(total_distance, leg_distance, total_time):
         if total_distance > 0:
             return total_time - (total_time * ((total_distance - leg_distance) / total_distance))
+        else:
+            return 0
 
     @staticmethod
     def parse_offset(offset):
@@ -618,7 +620,10 @@ class FlightRecord(Record):
         end_time = self.fields['arrivalTimePub']
         end_offset = self.fields['arrivalUTCVariance']
         days_indicator = self.fields['flightArrivalDayIndicator']
-        self.fields['totalTime'] = FlightRecord.elapsed_time(begin_time, begin_offset, end_time, end_offset, days_indicator)
+        try:
+            self.fields['totalTime'] = FlightRecord.elapsed_time(begin_time, begin_offset, end_time, end_offset, days_indicator)
+        except InvalidRecordProperty as e:
+            logging.warn(e.message)
 
     def gen_totalDistance(self):
         if len(self.fields) == 0:
@@ -631,7 +636,8 @@ class FlightRecord(Record):
         if self.fields['departureAirport']['_id'] == self.fields['arrivalAirport']['_id']:
             # edge case, we better have stops or raise invalid record error
             if len(self.fields['stopCodes']) == 0:
-                raise InvalidRecordProperty('departureAirport and arrivalAirport are the same and without stops.')
+                self.fields['totalDistance'] = None
+                return;
 
         if len(self.fields['stopCodes']) > 0:
             previousAirport = None
@@ -641,7 +647,6 @@ class FlightRecord(Record):
                 else:
                     total_distance += FlightRecord.total_distance(previousAirport, airport)
                 previousAirport = airport
-
             if previousAirport != None:
                 total_distance += FlightRecord.total_distance(previousAirport, self.fields['arrivalAirport'])
         else:
@@ -794,10 +799,11 @@ class AirportRecord(Record):
         super(AirportRecord, self).__init__()
         self.header_row = header_row
         self.provider_map = provider_map
+        if provider_map == None:
+            raise InvalidRecordProperty('Record "provider_map" property is None')
         self.provider_map_keys_lower = map(lambda x: x.lower(), provider_map.keys())
         self.collection_name = collection_name
         self.row_count = row_count
-        self.mongo_connection = mongo_connection
         self.validator = Validator(self.schema)
 
     @staticmethod

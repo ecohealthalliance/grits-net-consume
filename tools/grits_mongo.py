@@ -56,30 +56,29 @@ class GritsMongoConnection(object):
 
     def ensure_indexes(self, *args):
         """ creates indexes on the collections if they do not exist """
+        # recreates the indexes
         airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
         airports.create_index([("loc", pymongo.GEOSPHERE)])
         airports.create_index([
-				("_id", pymongo.ASCENDING),
-				("name", pymongo.TEXT),
-				("city", pymongo.TEXT),
-				("state", pymongo.TEXT),
-				("stateName", pymongo.TEXT),
-				("country", pymongo.TEXT),
-				("countryName", pymongo.TEXT),
-				("globalRegion", pymongo.TEXT),
-				("notes", pymongo.TEXT)
-			],
-			weights={
-				"notes": 1,
-				"globalRegion": 2,
-				"countryName": 3,
-				"country": 4,
-				"stateName": 5,
-				"state": 6,
-				"city": 7,
-				"name": 8
-			},
-			name="idxAirports")
+            ("_id", pymongo.ASCENDING),
+            ("name", pymongo.TEXT),
+            ("city", pymongo.TEXT),
+            ("state", pymongo.TEXT),
+            ("stateName", pymongo.TEXT),
+            ("country", pymongo.TEXT),
+            ("countryName", pymongo.TEXT),
+            ("globalRegion", pymongo.TEXT),
+            ("notes", pymongo.TEXT)
+            ], weights={
+            "notes": 1,
+            "globalRegion": 2,
+            "countryName": 3,
+            "country": 4,
+            "stateName": 5,
+            "state": 6,
+            "city": 7,
+            "name": 8
+            }, name="idxAirports")
         flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
         flights.create_index([("departureAirport.loc", pymongo.GEOSPHERE)])
         flights.create_index([("arrivalAirport.loc", pymongo.GEOSPHERE)])

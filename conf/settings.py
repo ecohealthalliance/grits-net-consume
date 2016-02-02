@@ -1,5 +1,6 @@
 import logging
 import os
+import multiprocessing
 
 # Application constants
 
@@ -26,12 +27,21 @@ _INVALID_RECORD_COLLECTION_NAME = 'invalidRecords'
 # schema
 _DISABLE_SCHEMA_MATCH = True #raise exception for headers not in the schema?
 
-# number of lines to split the file
+# number of lines to split the file, multiprocessing may be faster the
+# higher this is set but it will also consume more memory
 _CHUNK_SIZE = 5000
 
-# threading?
-_NODES = 5
+# threading? threading spawns treads but is limited by the Python global
+# interpreter lock (GIL)
 _THREADING_ENABLED = False
+_THREADS = 5
+
+# multiprocessing? multiprocessing uses multiple cpu cores to distribute work
+_MULTIPROCESSING_ENABLED = False
+if multiprocessing.cpu_count() > 1:
+    _CORES = multiprocessing.cpu_count() - 1
+else:
+    _CORES = 1
 
 # drop indexes?  Setting this to 'true' will drop any existing indexes in the
 # database.  This is most likely desirable, as bulk upserts should be faster

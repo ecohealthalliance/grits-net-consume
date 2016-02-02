@@ -2,4 +2,6 @@ pymongo
 mongomock
 nose
 cerberus
+git+https://github.com/uqfoundation/dill.git@master
+git+https://github.com/uqfoundation/multiprocess.git@master
 git+https://github.com/uqfoundation/pathos.git@master

@@ -110,19 +110,19 @@ class TestTimeDelta(unittest.TestCase):
         self.assertEqual(seconds, 18000.0)
     def test_noclockchange_differentoffset(self):
         seconds = FlightRecord.elapsed_time('10:00:00', '-0500', '15:00:00', '-0200', 0)
-        self.assertEqual(seconds, 28800.0)
+        self.assertEqual(seconds, 7200.0)
     def test_clockchange_sameoffset(self):
         seconds = FlightRecord.elapsed_time('21:40:00', '-0700', '00:29:00', '-0700', 1)
         self.assertEqual(seconds, 10140.0)
     def test_clockchange_differentoffset(self):
-        seconds = FlightRecord.elapsed_time('22:00:00', '+0200', '01:05:00', '+0300', 1)
-        self.assertEqual(seconds, 14700.0)
+        seconds = FlightRecord.elapsed_time('22:00:00', '-0300', '01:05:00', '-0500', 1)
+        self.assertEqual(seconds, 18300.0)
     def test_noclockchange_differentoffset_multiday(self):
-        seconds = FlightRecord.elapsed_time('15:10:00', '-0600', '01:05:00', '+1100', 2)
-        self.assertEqual(seconds, 183300.0)
+        seconds = FlightRecord.elapsed_time('15:10:00', '-0600', '11:05:00', '+1100', 2)
+        self.assertEqual(seconds, 96900.0)
     def test_clockchange_differentoffset_multiday(self):
-        seconds = FlightRecord.elapsed_time('17:30:00', '+0100', '0:45:00', '-0500', 2)
-        self.assertEqual(seconds, 90900.0)
+        seconds = FlightRecord.elapsed_time('17:30:00', '+0100', '23:45:00', '-0500', 2)
+        self.assertEqual(seconds, 44100.0)
 
 
 class TestGritsFlightRecord(unittest.TestCase):

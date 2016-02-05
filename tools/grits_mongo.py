@@ -29,6 +29,8 @@ class GritsMongoConnection(object):
         self._database = program_arguments.database
         self._client = None
         self._db = self.connect()
+        if settings._DROP_INDEXES:
+            self.drop_indexes()
 
     def connect(self):
         """ connect to mongoDB
@@ -44,6 +46,13 @@ class GritsMongoConnection(object):
                 (self._hostname, self._database)
         self._client = pymongo.MongoClient(uri)
         return pymongo.database.Database(self._client, self._database)
+
+    def drop_indexes(self):
+        """ drops any existing indexes"""
+        airports = pymongo.collection.Collection(self._db, settings._AIRPORT_COLLECTION_NAME)
+        airports.drop_indexes()
+        flights = pymongo.collection.Collection(self._db, settings._FLIGHT_COLLECTION_NAME)
+        flights.drop_indexes()
 
     def ensure_indexes(self, *args):
         """ creates indexes on the collections if they do not exist """
@@ -76,36 +85,12 @@ class GritsMongoConnection(object):
         flights.create_index([("arrivalAirport.loc", pymongo.GEOSPHERE)])
         # Stand-alone dates (min/max date ranges)
         flights.create_index([
-                ("effectiveDate", pymongo.ASCENDING)
-            ], name="idxFlights_EffectiveDateAscending")
-        flights.create_index([
                 ("effectiveDate", pymongo.DESCENDING)
             ], name="idxFlights_EffectiveDateDescending")
-        flights.create_index([
-                ("discontinuedDate", pymongo.ASCENDING)
-            ], name="idxFlights_DiscontinuedDateAscending")
         flights.create_index([
                 ("discontinuedDate", pymongo.DESCENDING)
             ], name="idxFlights_DiscontinuedDateDescending")
         # Departure Airport Combinations
-        flights.create_index([
-                ("departureAirport._id", pymongo.ASCENDING),
-                ("discontinuedDate", pymongo.ASCENDING),
-                ("effectiveDate", pymongo.ASCENDING)
-            ], name="idxFlights_DepartureAirportDates")
-        flights.create_index([
-                ("departureAirport._id", pymongo.ASCENDING),
-                ("discontinuedDate", pymongo.ASCENDING),
-                ("effectiveDate", pymongo.ASCENDING),
-                ("stops", pymongo.ASCENDING)
-            ], name="idxFlights_DepartureAirportDatesStops")
-        flights.create_index([
-                ("departureAirport._id", pymongo.ASCENDING),
-                ("discontinuedDate", pymongo.ASCENDING),
-                ("effectiveDate", pymongo.ASCENDING),
-                ("stops", pymongo.ASCENDING),
-                ("totalSeats", pymongo.ASCENDING)
-            ], name="idxFlights_DepartureAirportDatesStopsTotalSeats")
         flights.create_index([
                 ("departureAirport._id", pymongo.ASCENDING),
                 ("discontinuedDate", pymongo.ASCENDING),

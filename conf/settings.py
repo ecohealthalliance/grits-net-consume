@@ -33,6 +33,12 @@ _CHUNK_SIZE = 5000
 _NODES = 5
 _THREADING_ENABLED = True
 
+# drop indexes?  Setting this to 'true' will drop any existing indexes in the
+# database.  This is most likely desirable, as bulk upserts should be faster
+# without any indexes on the collection.  However, it is important to remember
+# to then build the indexes through grits_ensure_index.py
+_DROP_INDEXES = True
+
 # default command-line options
 # Allow environment variables for MONGO_HOST, MONGO_DATABASE, MONGO_USERNAME,
 # and MONGO_PASSWORD to override these settings

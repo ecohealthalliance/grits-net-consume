@@ -27,10 +27,12 @@ _INVALID_RECORD_COLLECTION_NAME = 'invalidRecords'
 _DISABLE_SCHEMA_MATCH = True #raise exception for headers not in the schema?
 
 # number of lines to split the file
-_CHUNK_SIZE = 5000
+_CHUNK_SIZE = 500
 
 # threading?
 _NODES = 5
+_CHUNK_NODES = 10
+_ROW_NODES = 2
 _THREADING_ENABLED = True
 
 # drop indexes?  Setting this to 'true' will drop any existing indexes in the

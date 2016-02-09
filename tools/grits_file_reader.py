@@ -75,43 +75,63 @@ class GritsFileReader:
         reader = UnicodeReader(self.program_arguments.infile, dialect=self.provider_type.dialect)
         self.find_header(reader)
 
-        for chunk in GritsFileReader.gen_chunks(reader, mongo_connection):
-            # collections of valid and invaid records to be batch upsert / insert many
-            valid_records = []
-            invalid_records = []
-            # is threading enabled?  this may increase performance when mongoDB
-            # is not running on localhost due to busy wait on finding an airport
-            # in the case of FlightGlobalType.
-            if settings._THREADING_ENABLED:
-                pool = ThreadPool(nodes=settings._NODES)
-                results = pool.amap(self.process_row, chunk)
+        chunks = GritsFileReader.gen_chunks(reader, mongo_connection)
+        if settings._THREADING_ENABLED:
+            pool = ThreadPool(nodes=settings._CHUNK_NODES)
+            results = pool.amap(self.process_chunk, chunks)
 
-                while not results.ready():
-                    # command-line spinner
-                    for cursor in '|/-\\':
-                        sys.stdout.write('\b%s' % cursor)
-                        sys.stdout.flush()
-                        time.sleep(.25)
+            while not results.ready():
+                # command-line spinner
+                for cursor in '|/-\\':
+                    sys.stdout.write('\b%s' % cursor)
+                    sys.stdout.flush()
+                    time.sleep(.25)
 
-                sys.stdout.write('\b')
-                sys.stdout.flush()
-                # async-poll is done, get the results
-                result = results.get()
-                valid_records = [ x[0] for x in result if x[0] is not None ]
-                invalid_records = [ x[1] for x in result if x[1] is not None ]
+            sys.stdout.write('\b')
+            sys.stdout.flush()
+            # async-poll is done, get the results
+            result = results.get()
+        else:
+            chunks = GritsFileReader.gen_chunks(reader, mongo_connection)
+            for chunk in chunks:
+                self.process_chunk(chunk)
 
-            else:
-                # single-threaded synchronous processing
-                for data in chunk:
-                    valid, invalid = self.process_row(data)
-                    if valid != None: valid_records.append(valid)
-                    if invalid != None: invalid_records.append(invalid)
+    def process_chunk(self, chunk):
+        mongo_connection = chunk[-1][-1]
 
-            # bulk upsert / inset many of the records
-            valid_result = mongo_connection.bulk_upsert(self.provider_type.collection_name, valid_records)
-            invalid_result = mongo_connection.insert_many(settings._INVALID_RECORD_COLLECTION_NAME, invalid_records)
-            logging.debug('valid_result: %r', valid_result)
-            logging.debug('invalid_result: %r', invalid_result)
+        valid_records = []
+        invalid_records = []
+
+        if settings._THREADING_ENABLED:
+            pool = ThreadPool(nodes=settings._ROW_NODES)
+            results = pool.amap(self.process_row, chunk)
+
+            while not results.ready():
+                # command-line spinner
+                for cursor in '|/-\\':
+                    sys.stdout.write('\b%s' % cursor)
+                    sys.stdout.flush()
+                    time.sleep(.25)
+
+            sys.stdout.write('\b')
+            sys.stdout.flush()
+            # async-poll is done, get the results
+            result = results.get()
+            valid_records = [ x[0] for x in result if x[0] is not None ]
+            invalid_records = [ x[1] for x in result if x[1] is not None ]
+
+        else:
+            # single-threaded synchronous processing
+            for data in chunk:
+                valid, invalid = self.process_row(data)
+                if valid != None: valid_records.append(valid)
+                if invalid != None: invalid_records.append(invalid)
+
+        # bulk upsert / inset many of the records
+        valid_result = mongo_connection.bulk_upsert(self.provider_type.collection_name, valid_records)
+        invalid_result = mongo_connection.insert_many(settings._INVALID_RECORD_COLLECTION_NAME, invalid_records)
+        logging.debug('valid_result: %r', valid_result)
+        logging.debug('invalid_result: %r', invalid_result)
 
     def process_row(self, args):
         """ process each row according to the record type contract

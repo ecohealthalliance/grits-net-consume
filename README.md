@@ -6,14 +6,14 @@ MongoDB with geospatial indexing.
 
 ## Prerequisites
 
-##### Machintosh OS X
+##### Mac OS X
   - Xcode
   - homebrew
   - python (2.7.10)
 See the following guide: http://docs.python-guide.org/en/latest/starting/install/osx/
 
 ##### Ubuntu
- - build-essential (for gcc)
+ - build-essential (provides gcc)
  - python (2.7.10)
  - python-dev (2.7.10)
  - python-setuptools

@@ -33,6 +33,10 @@ class GritsEnsureIndexes(object):
         self.parser.add_argument('-m', '--mongohost',
             default='localhost',
             help='the hostname for mongoDB (Default: localhost)')
+
+        self.parser.add_argument('-f', '--force', 
+            action='store_true',
+            help='do not require confirmation to create indexes (Default: False)')
         
     def query_yes_no(self, question, default="yes"):
         """
@@ -81,7 +85,9 @@ class GritsEnsureIndexes(object):
         mongo_connection = GritsMongoConnection(program_args)
         
         # Confirm the user wants to apply the indexes
-        confirm = self.query_yes_no("This will lock the database.  Are your sure?", "no")
+        confirm = True
+        if not program_args.force:
+            confirm = self.query_yes_no("This will lock the database.  Are your sure?", "no")
         if confirm:
             # ensure that the indexes are applied to the collections
             pool = ThreadPool(nodes=1)

@@ -132,6 +132,8 @@ class GritsConsumer(object):
             num_airports = db[settings._AIRPORT_COLLECTION_NAME].find().count();
             if num_airports == 0:
                 raise MissingRecords('Please import the type DiioAirport before FlightGlobal')
+            # clear the legs collection
+            db['legs'].delete_many({})
         
         # create a new file reader object of the specified report type
         reader = GritsFileReader(report_type, program_args)

@@ -1,0 +1,1037 @@
+ 
+Now analyzing country: Egypt
+Number airports in country: 34
+Possible Outlier: QSU distance to country center: 2691.442307235476 pValue: 0.9995354591468071
+Possible Outlier: QGX distance to country center: 3328.245234062465 pValue: 0.9999913815259276
+ 
+Now analyzing country: Sudan
+Number airports in country: 27
+Possible Outlier: BJE distance to country center: 2734.91981220251 pValue: 0.9990552409158309
+Possible Outlier: KJN distance to country center: 2908.238191731145 pValue: 0.9996289549785593
+ 
+Now analyzing country: United States
+Number airports in country: 2618
+Possible Outlier: ADK distance to country center: 6283.2540973813375 pValue: 0.9957466627574243
+Possible Outlier: GUM distance to country center: 11563.493835722084 pValue: 0.9999999984167482
+Possible Outlier: AHT distance to country center: 6567.690831737893 pValue: 0.9975119228696618
+Possible Outlier: AIN distance to country center: 5214.185032072542 pValue: 0.9752848204101681
+Possible Outlier: AKB distance to country center: 6113.145407470622 pValue: 0.9942188847325116
+Possible Outlier: AKI distance to country center: 5177.234308603287 pValue: 0.9739209984583997
+Possible Outlier: ANI distance to country center: 5087.872001954118 pValue: 0.9703608127651451
+Possible Outlier: HHI distance to country center: 6177.827306601809 pValue: 0.9948493895800372
+Possible Outlier: HIK distance to country center: 6177.912923363913 pValue: 0.9948501818982597
+Possible Outlier: HNL distance to country center: 6178.484083713049 pValue: 0.994855464779117
+Possible Outlier: HNM distance to country center: 6039.7673772904045 pValue: 0.9934214865871758
+Possible Outlier: ANV distance to country center: 5126.0405548366925 pValue: 0.971927956568411
+Possible Outlier: ATK distance to country center: 5114.449034665805 pValue: 0.9714594923283855
+Possible Outlier: ATT distance to country center: 5234.432779764777 pValue: 0.9760064265841033
+Possible Outlier: ATU distance to country center: 6883.871511539143 pValue: 0.9986749992298147
+Possible Outlier: AUK distance to country center: 5351.835616306231 pValue: 0.9798502436568273
+Possible Outlier: JHM distance to country center: 6088.307370697081 pValue: 0.9939591324697112
+Possible Outlier: BET distance to country center: 5210.338333372952 pValue: 0.9751456905891115
+Possible Outlier: BLW distance to country center: 6157.84975802237 pValue: 0.9946615195240555
+Possible Outlier: KCD distance to country center: 5281.732186547002 pValue: 0.9776233842033338
+Possible Outlier: KCN distance to country center: 5647.1597852429195 pValue: 0.9872833493477675
+Possible Outlier: BKC distance to country center: 5193.155839495481 pValue: 0.9745161785083307
+Possible Outlier: BKH distance to country center: 6300.286243552585 pValue: 0.9958777071306698
+Possible Outlier: KLG distance to country center: 5129.540515707408 pValue: 0.9720681404321913
+Possible Outlier: BRW distance to country center: 5112.896444868285 pValue: 0.9713962542965158
+Possible Outlier: BSF distance to country center: 6159.40897674121 pValue: 0.9946763987525586
+Possible Outlier: LHB distance to country center: 5503.925444523059 pValue: 0.9840424137824524
+Possible Outlier: BVD distance to country center: 5557.037646228829 pValue: 0.9853185256644661
+Possible Outlier: CIL distance to country center: 5307.601888059917 pValue: 0.978468191917985
+Possible Outlier: CDB distance to country center: 5305.238091747879 pValue: 0.9783921349069115
+Possible Outlier: CDL distance to country center: 5229.290995693328 pValue: 0.9758248774264776
+Possible Outlier: CSU distance to country center: 5336.371986227195 pValue: 0.9793758984085374
+Possible Outlier: DFB distance to country center: 5504.630684710742 pValue: 0.9840599621869323
+Possible Outlier: DIO distance to country center: 5548.315499074052 pValue: 0.9851151894956958
+Possible Outlier: EEK distance to country center: 5221.946923911434 pValue: 0.9755635686616995
+Possible Outlier: ELI distance to country center: 5237.293396411319 pValue: 0.9761069339907865
+Possible Outlier: CYF distance to country center: 5342.441511587571 pValue: 0.979563196303795
+Possible Outlier: CZF distance to country center: 5430.3378332882785 pValue: 0.9821179937011038
+Possible Outlier: GAM distance to country center: 5698.815987782851 pValue: 0.9883035783300529
+Possible Outlier: GNU distance to country center: 5201.758023171773 pValue: 0.9748329846978449
+Possible Outlier: NOL distance to country center: 5196.382622511118 pValue: 0.9746354055879163
+Possible Outlier: HAY distance to country center: 5188.080037205507 pValue: 0.9743276820197821
+Possible Outlier: HCR distance to country center: 5102.6021773697485 pValue: 0.9709740075124124
+Possible Outlier: HDH distance to country center: 6173.833444537026 pValue: 0.9948123086274244
+Possible Outlier: PAK distance to country center: 6294.3002992774445 pValue: 0.9958320691699617
+Possible Outlier: PBA distance to country center: 5112.802880631238 pValue: 0.9713924396416509
+Possible Outlier: HKP distance to country center: 6090.883428609454 pValue: 0.9939865450845065
+Possible Outlier: DRG distance to country center: 5266.346794496154 pValue: 0.9771078206691494
+Possible Outlier: PIZ distance to country center: 5311.051807431381 pValue: 0.9785787896185512
+Possible Outlier: PKA distance to country center: 5206.495611186017 pValue: 0.9750060493656476
+Possible Outlier: IKO distance to country center: 5742.837236021571 pValue: 0.9891161746923073
+Possible Outlier: DUT distance to country center: 5570.945331142007 pValue: 0.985637806884975
+Possible Outlier: PML distance to country center: 5161.264252005814 pValue: 0.9733123697091237
+Possible Outlier: PMU distance to country center: 5131.101185178583 pValue: 0.972130461660023
+Possible Outlier: EHM distance to country center: 5231.806741979883 pValue: 0.9759138485412677
+Possible Outlier: EMK distance to country center: 5346.982677873599 pValue: 0.9797023865103801
+Possible Outlier: KEU distance to country center: 5261.749302614084 pValue: 0.9769518305004891
+Possible Outlier: KIB distance to country center: 5095.322730544133 pValue: 0.9706723057045679
+Possible Outlier: EWD distance to country center: 5108.742461698885 pValue: 0.9712264865151047
+Possible Outlier: KKA distance to country center: 5186.075518261464 pValue: 0.974252920819265
+Possible Outlier: KKF distance to country center: 5310.037525784954 pValue: 0.9785463236759685
+Possible Outlier: KKH distance to country center: 5281.767862932889 pValue: 0.9776245682399822
+Possible Outlier: KKI distance to country center: 5187.989983397147 pValue: 0.9743243272460632
+Possible Outlier: KPC distance to country center: 5453.832357848064 pValue: 0.9827528578865506
+Possible Outlier: KPN distance to country center: 5336.106589147437 pValue: 0.9793676755195827
+Possible Outlier: KQA distance to country center: 5517.598398669717 pValue: 0.9843796993845474
+Possible Outlier: FTI distance to country center: 9573.886700025898 pValue: 0.9999985829879087
+Possible Outlier: FTL distance to country center: 5221.7552308064105 pValue: 0.9755567164185563
+Possible Outlier: RDB distance to country center: 5288.467585524421 pValue: 0.9778459854388535
+Possible Outlier: KUK distance to country center: 5248.186175618412 pValue: 0.9764864170113912
+Possible Outlier: KUW distance to country center: 5249.798307986217 pValue: 0.9765421474791922
+Possible Outlier: KVC distance to country center: 5281.470823824955 pValue: 0.9776147084213287
+Possible Outlier: KVL distance to country center: 5355.081385832106 pValue: 0.9799486237396559
+Possible Outlier: KWK distance to country center: 5285.674604724353 pValue: 0.9777539067897515
+Possible Outlier: KWN distance to country center: 5214.981699325213 pValue: 0.9753135529537694
+Possible Outlier: KWT distance to country center: 5188.926049015719 pValue: 0.9743591805780877
+Possible Outlier: GFB distance to country center: 5127.876008222838 pValue: 0.9720015448286047
+Possible Outlier: LNY distance to country center: 6122.964682486671 pValue: 0.9943188079995365
+Possible Outlier: LUR distance to country center: 5425.129267533624 pValue: 0.9819745808289664
+Possible Outlier: GLV distance to country center: 5273.660285792405 pValue: 0.9773541299115934
+Possible Outlier: GMT distance to country center: 5195.367314734108 pValue: 0.9745979412535136
+Possible Outlier: SCM distance to country center: 5406.692867599384 pValue: 0.9814590478649554
+Possible Outlier: SHX distance to country center: 5094.538441065166 pValue: 0.9706396454281525
+Possible Outlier: HED distance to country center: 5179.895012716854 pValue: 0.9740212626888848
+Possible Outlier: HOL distance to country center: 5093.804369721924 pValue: 0.9706090490347631
+Possible Outlier: HPB distance to country center: 5437.989596249847 pValue: 0.9823269120906336
+Possible Outlier: HPV distance to country center: 6262.387432763653 pValue: 0.9955810464192351
+Possible Outlier: TLA distance to country center: 5430.489636637267 pValue: 0.9821221588241617
+Possible Outlier: IAN distance to country center: 5172.713685426283 pValue: 0.9737499042521892
+Possible Outlier: MKK distance to country center: 6114.769325005886 pValue: 0.9942355169778575
+Possible Outlier: MOS distance to country center: 5226.867514980406 pValue: 0.9757389084601765
+Possible Outlier: MOU distance to country center: 5307.549571297009 pValue: 0.9784665110365611
+Possible Outlier: NAX distance to country center: 6196.7159026907 pValue: 0.995021583311033
+Possible Outlier: TLT distance to country center: 5163.240023617178 pValue: 0.9733883048240819
+Possible Outlier: TNC distance to country center: 5501.974643151015 pValue: 0.9839937859411232
+Possible Outlier: TNK distance to country center: 5398.307909254452 pValue: 0.9812204592856018
+Possible Outlier: TOG distance to country center: 5133.513779860196 pValue: 0.9722265743071253
+Possible Outlier: NLG distance to country center: 5197.833001796509 pValue: 0.9746888435415546
+Possible Outlier: NME distance to country center: 5368.156823474912 pValue: 0.9803408269440194
+Possible Outlier: ITO distance to country center: 6017.305314339926 pValue: 0.9931586736020198
+Possible Outlier: JBT distance to country center: 5205.892414610889 pValue: 0.9749840701037837
+Possible Outlier: OFU distance to country center: 9589.69279550921 pValue: 0.9999986495706702
+Possible Outlier: OGG distance to country center: 6070.4866216654345 pValue: 0.9937664443555964
+Possible Outlier: OHC distance to country center: 5567.4038925333625 pValue: 0.9855570781408298
+Possible Outlier: OOK distance to country center: 5389.973569680126 pValue: 0.9809807270838335
+Possible Outlier: JRF distance to country center: 6192.187244660631 pValue: 0.9949807728665463
+Possible Outlier: UNS distance to country center: 5701.551306879162 pValue: 0.9883555627223428
+Possible Outlier: ORV distance to country center: 5196.812952827464 pValue: 0.9746512705828676
+Possible Outlier: KFP distance to country center: 5353.782193466267 pValue: 0.9799092939074021
+Possible Outlier: KGX distance to country center: 5120.776065809007 pValue: 0.9717159951323464
+Possible Outlier: UXA distance to country center: 5302.119875564728 pValue: 0.9782914566810159
+Possible Outlier: KOA distance to country center: 6106.499923372604 pValue: 0.9941503768061344
+Possible Outlier: KOT distance to country center: 5297.856872118336 pValue: 0.9781531755526616
+Possible Outlier: KSM distance to country center: 5285.817649429165 pValue: 0.977758630503161
+Possible Outlier: KSR distance to country center: 5139.298330029133 pValue: 0.9724558940064902
+Possible Outlier: VZA distance to country center: 5091.559487305176 pValue: 0.9705153170998224
+Possible Outlier: VZG distance to country center: 5296.623721187385 pValue: 0.9781130367853079
+Possible Outlier: VZO distance to country center: 5119.697975320437 pValue: 0.9716724246057238
+Possible Outlier: VZU distance to country center: 5160.4387967859175 pValue: 0.9732805913146949
+Possible Outlier: VZV distance to country center: 5215.476945216633 pValue: 0.9753314003268837
+Possible Outlier: WAA distance to country center: 5509.875158458129 pValue: 0.9841899415503319
+Possible Outlier: KTS distance to country center: 5435.806387942887 pValue: 0.9822675167359532
+Possible Outlier: LIH distance to country center: 6266.729007664765 pValue: 0.9956159721557976
+Possible Outlier: WMO distance to country center: 5291.628808121528 pValue: 0.9779498159885319
+Possible Outlier: WNA distance to country center: 5226.031840792029 pValue: 0.9757092048367837
+Possible Outlier: WWT distance to country center: 5362.264548986407 pValue: 0.980164899383064
+Possible Outlier: LUP distance to country center: 6100.529529787631 pValue: 0.9940882152004648
+Possible Outlier: MLL distance to country center: 5221.7552308064105 pValue: 0.9755567164185563
+Possible Outlier: ROP distance to country center: 11475.329258489548 pValue: 0.9999999977914855
+Possible Outlier: RSH distance to country center: 5182.406924079523 pValue: 0.974115623789904
+Possible Outlier: MUE distance to country center: 6054.848177562754 pValue: 0.9935928891494906
+Possible Outlier: MYU distance to country center: 5454.7941392911625 pValue: 0.9827784313691404
+Possible Outlier: NGF distance to country center: 6157.5659169236515 pValue: 0.9946588069253718
+Possible Outlier: NGM distance to country center: 11569.308120417863 pValue: 0.9999999984512825
+Possible Outlier: NRV distance to country center: 11567.152194027232 pValue: 0.9999999984385637
+Possible Outlier: SDP distance to country center: 5164.832661641328 pValue: 0.9734493834519855
+Possible Outlier: NUP distance to country center: 5244.5041296068575 pValue: 0.9763587130294732
+Possible Outlier: STG distance to country center: 5702.944200711307 pValue: 0.988381957331317
+Possible Outlier: OME distance to country center: 5388.636266631844 pValue: 0.9809420190941149
+Possible Outlier: OTZ distance to country center: 5266.276731480359 pValue: 0.9771054501632894
+Possible Outlier: PHO distance to country center: 5451.279063622085 pValue: 0.9826848091105401
+Possible Outlier: PPG distance to country center: 9686.739050307615 pValue: 0.9999989971201609
+Possible Outlier: PQS distance to country center: 5264.776068051679 pValue: 0.9770546271789884
+Possible Outlier: PTU distance to country center: 5215.744860885997 pValue: 0.9753410507972365
+Possible Outlier: SVA distance to country center: 5637.196664369993 pValue: 0.9870779538885756
+Possible Outlier: TAV distance to country center: 9579.834766152137 pValue: 0.999998608405483
+Possible Outlier: TIQ distance to country center: 11381.25047333331 pValue: 0.9999999968599499
+Possible Outlier: UMB distance to country center: 5669.595487729171 pValue: 0.987735556632754
+Possible Outlier: VAK distance to country center: 5408.597170288145 pValue: 0.9815128724730664
+Possible Outlier: WQJ distance to country center: 5156.0611686461925 pValue: 0.9731115326266747
+Possible Outlier: WQL distance to country center: 5308.996125613453 pValue: 0.9785129464334429
+Possible Outlier: WQV distance to country center: 5111.65325749454 pValue: 0.9713455344549486
+Possible Outlier: WQW distance to country center: 5240.384246600493 pValue: 0.9762151326525996
+Possible Outlier: WRH distance to country center: 5265.2363881822375 pValue: 0.977070226940731
+Possible Outlier: WSF distance to country center: 5453.905765603089 pValue: 0.9827548109198943
+Possible Outlier: SHH distance to country center: 5416.262940926571 pValue: 0.9817281995226149
+Possible Outlier: SKK distance to country center: 5181.657941663993 pValue: 0.9740875179755375
+Possible Outlier: SMK distance to country center: 5221.576579655062 pValue: 0.9755503289198295
+Possible Outlier: SNP distance to country center: 5731.089415256008 pValue: 0.9889042743961354
+Possible Outlier: SOL distance to country center: 5340.721116116735 pValue: 0.9795102540233179
+Possible Outlier: SPN distance to country center: 11363.960556102935 pValue: 0.9999999966513738
+Possible Outlier: SXP distance to country center: 5363.766287529095 pValue: 0.9802098636751042
+Possible Outlier: SYA distance to country center: 6833.069252028392 pValue: 0.9985302647836534
+Possible Outlier: TWA distance to country center: 5127.09553808456 pValue: 0.9719702733389036
+Possible Outlier: TWE distance to country center: 5361.049194935882 pValue: 0.9801284464198232
+Possible Outlier: UAM distance to country center: 11545.38579146849 pValue: 0.9999999983043218
+Possible Outlier: UNK distance to country center: 5162.4272987792765 pValue: 0.9733570911332176
+Possible Outlier: UPP distance to country center: 6056.639363254968 pValue: 0.9936129822067582
+Possible Outlier: UXL distance to country center: 5407.697860146199 pValue: 0.981487470315594
+Possible Outlier: UXM distance to country center: 5548.648758581068 pValue: 0.9851230029129824
+Possible Outlier: WBB distance to country center: 5234.11546491872 pValue: 0.9759952559084372
+Possible Outlier: WKL distance to country center: 6122.968261947963 pValue: 0.9943188441436455
+Possible Outlier: WLK distance to country center: 5148.753445552525 pValue: 0.972827327966104
+Possible Outlier: WTK distance to country center: 5287.924226995957 pValue: 0.9778280973040342
+Possible Outlier: WTL distance to country center: 5255.440922037466 pValue: 0.9767363348746609
+Possible Outlier: ZNC distance to country center: 5110.707770031948 pValue: 0.9713069101884955
+ 
+Now analyzing country: Brazil
+Number airports in country: 440
+Possible Outlier: IRZ distance to country center: 2111.495104693581 pValue: 0.9799973020877137
+Possible Outlier: BVB distance to country center: 2129.0667270634535 pValue: 0.9819165713903406
+Possible Outlier: CTQ distance to country center: 2150.553775622986 pValue: 0.9840481251423593
+Possible Outlier: ERN distance to country center: 2138.705747224769 pValue: 0.9829010780019902
+Possible Outlier: CZS distance to country center: 2393.374754225304 pValue: 0.9967068972916675
+Possible Outlier: OLC distance to country center: 2219.5317163789164 pValue: 0.9894989919062238
+Possible Outlier: FEJ distance to country center: 2119.8943820218137 pValue: 0.9809352634549557
+Possible Outlier: FEN distance to country center: 2429.995385027191 pValue: 0.9974705305871161
+Possible Outlier: NAT distance to country center: 2040.987365312279 pValue: 0.9704708567025837
+Possible Outlier: NSA distance to country center: 2046.3299985452356 pValue: 0.9713052585882089
+Possible Outlier: TBT distance to country center: 2265.9527255358266 pValue: 0.9921797069013352
+Possible Outlier: TRQ distance to country center: 2162.985370025266 pValue: 0.9851801144467202
+Possible Outlier: QAV distance to country center: 2272.3779117011127 pValue: 0.9924987205675878
+Possible Outlier: SJL distance to country center: 2280.7895682732405 pValue: 0.9928990052559743
+ 
+Now analyzing country: Kiribati
+Number airports in country: 21
+ 
+Now analyzing country: South Africa
+Number airports in country: 97
+Possible Outlier: NGL distance to country center: 3674.473713678852 pValue: 0.9999999999996355
+ 
+Now analyzing country: Australia
+Number airports in country: 660
+Possible Outlier: LDH distance to country center: 2565.1166185437023 pValue: 0.9936159167866305
+Possible Outlier: HBA distance to country center: 2320.677556538457 pValue: 0.9759837042911906
+ 
+Now analyzing country: Ivory Coast (Cote d'Ivoire)
+Number airports in country: 31
+ 
+Now analyzing country: Ethiopia
+Number airports in country: 57
+ 
+Now analyzing country: Suriname
+Number airports in country: 16
+ 
+Now analyzing country: Papua New Guinea
+Number airports in country: 397
+Possible Outlier: HNI distance to country center: 3593.8953069960085 pValue: 0.9999591629587601
+Possible Outlier: KGM distance to country center: 14476.517797297423 pValue: 1.0
+ 
+Now analyzing country: Saudi Arabia
+Number airports in country: 41
+Possible Outlier: ZII distance to country center: 11793.716297133553 pValue: 0.9999999996984402
+ 
+Now analyzing country: Indonesia
+Number airports in country: 215
+Possible Outlier: GAV distance to country center: 3341.5434157763825 pValue: 0.9850310277607908
+ 
+Now analyzing country: Nigeria
+Number airports in country: 37
+Possible Outlier: QAP distance to country center: 713.4481094858901 pValue: 0.971419079793663
+ 
+Now analyzing country: Colombia
+Number airports in country: 169
+Possible Outlier: ADZ distance to country center: 1206.611799901866 pValue: 0.9994073968263832
+Possible Outlier: LET distance to country center: 1088.7649492001055 pValue: 0.9970438794724382
+Possible Outlier: PVA distance to country center: 1246.0479646404997 pValue: 0.9996707815937353
+Possible Outlier: SQE distance to country center: 1874.5187014414923 pValue: 0.9999999991194733
+ 
+Now analyzing country: Iran
+Number airports in country: 84
+Possible Outlier: PYK distance to country center: 7592.346327808024 pValue: 0.9999999999999948
+Possible Outlier: RUD distance to country center: 4396.369665928892 pValue: 0.9999836565259836
+ 
+Now analyzing country: China
+Number airports in country: 347
+Possible Outlier: FYJ distance to country center: 2819.0515099469985 pValue: 0.9742638890464838
+Possible Outlier: TGX distance to country center: 11121.111100651899 pValue: 1.0
+ 
+Now analyzing country: South Sudan
+Number airports in country: 5
+ 
+Now analyzing country: Chad
+Number airports in country: 20
+ 
+Now analyzing country: Spain
+Number airports in country: 157
+Possible Outlier: GMZ distance to country center: 1851.6846193524066 pValue: 0.9755532625828353
+Possible Outlier: OZI distance to country center: 1848.3781333179625 pValue: 0.9752723773349945
+Possible Outlier: VDE distance to country center: 1911.6465592266968 pValue: 0.980200156001226
+Possible Outlier: TFS distance to country center: 1811.9430370147843 pValue: 0.971993996099365
+Possible Outlier: SPC distance to country center: 1834.1043177872164 pValue: 0.9740285627151444
+Possible Outlier: UPC distance to country center: 6823.8987848842635 pValue: 1.0
+Possible Outlier: XJR distance to country center: 2123.0157840970687 pValue: 0.9910926867561084
+ 
+Now analyzing country: Mauritania
+Number airports in country: 21
+ 
+Now analyzing country: Argentina
+Number airports in country: 115
+Possible Outlier: ORA distance to country center: 1699.2930668937229 pValue: 0.9726491214758598
+Possible Outlier: RGA distance to country center: 1737.5121858760654 pValue: 0.9777152781730366
+Possible Outlier: TTG distance to country center: 1771.1549349254112 pValue: 0.9814962361806419
+Possible Outlier: USH distance to country center: 1856.7883428172222 pValue: 0.9887446444828811
+Possible Outlier: ZAI distance to country center: 1696.5252187200372 pValue: 0.9722476187619975
+ 
+Now analyzing country: Russian Federation
+Number airports in country: 216
+ 
+Now analyzing country: Norway
+Number airports in country: 152
+Possible Outlier: HFT distance to country center: 1324.833341960698 pValue: 0.980108843241264
+Possible Outlier: ALF distance to country center: 1257.6351205880549 pValue: 0.9713647294212518
+Possible Outlier: BJF distance to country center: 1472.39251068771 pValue: 0.9917088421107586
+Possible Outlier: BVG distance to country center: 1475.1842866744985 pValue: 0.9918531588554625
+Possible Outlier: HAA distance to country center: 1270.8860344804134 pValue: 0.9733053103687128
+Possible Outlier: KKN distance to country center: 1422.4749145478193 pValue: 0.9887221324489345
+Possible Outlier: QVO distance to country center: 1372.1539717907926 pValue: 0.9848055646699455
+Possible Outlier: LKL distance to country center: 1305.6559658462752 pValue: 0.9778813538143739
+Possible Outlier: LYR distance to country center: 1989.9573790467246 pValue: 0.9998332760443776
+Possible Outlier: MEH distance to country center: 1456.455300391939 pValue: 0.9908412253990585
+Possible Outlier: HVG distance to country center: 1401.9341116171227 pValue: 0.9872443126734443
+Possible Outlier: QJL distance to country center: 1434.8473148221167 pValue: 0.9895385062234634
+Possible Outlier: QKK distance to country center: 1271.5083980209515 pValue: 0.9733936860728579
+Possible Outlier: QTP distance to country center: 1427.0856596339133 pValue: 0.9890326195823042
+Possible Outlier: VAW distance to country center: 1498.9959836583628 pValue: 0.9929970052221535
+Possible Outlier: VDS distance to country center: 1443.4922682500794 pValue: 0.9900779119275441
+ 
+Now analyzing country: Iceland
+Number airports in country: 37
+ 
+Now analyzing country: Sri Lanka
+Number airports in country: 33
+ 
+Now analyzing country: Uzbekistan
+Number airports in country: 12
+ 
+Now analyzing country: Solomon Islands
+Number airports in country: 43
+Possible Outlier: SCZ distance to country center: 763.8296045529485 pValue: 0.9975027065956356
+Possible Outlier: VAO distance to country center: 683.4314457973708 pValue: 0.9908363660264403
+ 
+Now analyzing country: Algeria
+Number airports in country: 83
+Possible Outlier: KDF distance to country center: 14023.0848873492 pValue: 1.0
+ 
+Now analyzing country: Germany
+Number airports in country: 331
+Possible Outlier: ZQM distance to country center: 9769.486552027029 pValue: 1.0
+Possible Outlier: ZCY distance to country center: 1582.081053869814 pValue: 0.9924204912788894
+ 
+Now analyzing country: Denmark
+Number airports in country: 59
+Possible Outlier: FAE distance to country center: 1148.180799013389 pValue: 0.9943729800102256
+Possible Outlier: XOA distance to country center: 1104.5800649915775 pValue: 0.9922422717511404
+Possible Outlier: ZIL distance to country center: 2646.626037768161 pValue: 0.9999999999519418
+ 
+Now analyzing country: United Arab Emirates
+Number airports in country: 25
+Possible Outlier: ZXZ distance to country center: 4260.7745864734525 pValue: 0.9999983966363106
+ 
+Now analyzing country: Venezuela
+Number airports in country: 66
+ 
+Now analyzing country: Western Samoa
+Number airports in country: 5
+ 
+Now analyzing country: Philippines
+Number airports in country: 75
+Possible Outlier: TGB distance to country center: 1389.2993984779878 pValue: 0.9998958395362489
+ 
+Now analyzing country: Pakistan
+Number airports in country: 67
+Possible Outlier: REQ distance to country center: 2112.7385433446975 pValue: 0.9999999980296137
+ 
+Now analyzing country: Yemen
+Number airports in country: 27
+Possible Outlier: KAM distance to country center: 734.6441713293636 pValue: 0.9804418548121828
+ 
+Now analyzing country: Guatemala
+Number airports in country: 22
+ 
+Now analyzing country: United Kingdom
+Number airports in country: 247
+Possible Outlier: QQM distance to country center: 7871.248625402077 pValue: 0.9999999986245649
+Possible Outlier: SWI distance to country center: 9548.217177350461 pValue: 0.9999999999998671
+Possible Outlier: QQK distance to country center: 8001.06085975584 pValue: 0.9999999992823199
+Possible Outlier: QQU distance to country center: 7695.853956230697 pValue: 0.9999999967443431
+Possible Outlier: QQN distance to country center: 8133.876275938094 pValue: 0.9999999996352565
+Possible Outlier: QQW distance to country center: 8113.241217811876 pValue: 0.9999999995945086
+ 
+Now analyzing country: Mexico
+Number airports in country: 103
+Possible Outlier: TIJ distance to country center: 1724.270210894548 pValue: 0.9733152516932359
+ 
+Now analyzing country: Ghana
+Number airports in country: 6
+Possible Outlier: WNE distance to country center: 1545.5630646762174 pValue: 0.9782768551101826
+ 
+Now analyzing country: Switzerland
+Number airports in country: 100
+Possible Outlier: EML distance to country center: 1253.153927303622 pValue: 1.0
+Possible Outlier: ZKF distance to country center: 643.1507451070969 pValue: 0.9999743509409124
+ 
+Now analyzing country: Panama
+Number airports in country: 44
+ 
+Now analyzing country: Turkey
+Number airports in country: 73
+ 
+Now analyzing country: Namibia
+Number airports in country: 34
+Possible Outlier: MPA distance to country center: 855.2721545141708 pValue: 0.9727660434172446
+ 
+Now analyzing country: Jordan
+Number airports in country: 9
+ 
+Now analyzing country: Honduras
+Number airports in country: 35
+ 
+Now analyzing country: Kazakhstan
+Number airports in country: 26
+ 
+Now analyzing country: India
+Number airports in country: 140
+Possible Outlier: IXT distance to country center: 1856.1273447154729 pValue: 0.9815946735683265
+Possible Outlier: IXV distance to country center: 1812.6564848290232 pValue: 0.97655751609912
+Possible Outlier: IXZ distance to country center: 1775.3579635288988 pValue: 0.9713549170960151
+Possible Outlier: CBD distance to country center: 1956.6406492093079 pValue: 0.989837141686691
+Possible Outlier: MOH distance to country center: 1799.9905091727558 pValue: 0.9748879058623325
+Possible Outlier: DIB distance to country center: 1799.9905091727558 pValue: 0.9748879058623325
+Possible Outlier: TEI distance to country center: 1920.91950960714 pValue: 0.9873790477308999
+ 
+Now analyzing country: Sweden
+Number airports in country: 107
+Possible Outlier: XXY distance to country center: 8317.928134395957 pValue: 1.0
+Possible Outlier: XZQ distance to country center: 2597.2756524116276 pValue: 0.9957789056671164
+ 
+Now analyzing country: Myanmar
+Number airports in country: 44
+Possible Outlier: KAW distance to country center: 1357.4159286969298 pValue: 0.999399285090573
+Possible Outlier: MGZ distance to country center: 1099.5322422982902 pValue: 0.9908197322842748
+Possible Outlier: VBP distance to country center: 1242.944597508161 pValue: 0.9977988546208546
+ 
+Now analyzing country: Zimbabwe
+Number airports in country: 15
+ 
+Now analyzing country: Finland
+Number airports in country: 62
+Possible Outlier: QVF distance to country center: 3307.38454161196 pValue: 0.9999999999983769
+ 
+Now analyzing country: Greece
+Number airports in country: 49
+Possible Outlier: KZS distance to country center: 756.5750203882943 pValue: 0.9943932956752973
+ 
+Now analyzing country: Dominican Republic
+Number airports in country: 14
+ 
+Now analyzing country: Israel
+Number airports in country: 15
+Possible Outlier: KSW distance to country center: 250.65001560115525 pValue: 0.9734126272305753
+ 
+Now analyzing country: Somalia
+Number airports in country: 21
+Possible Outlier: ALU distance to country center: 911.1502552507776 pValue: 0.9766483305026771
+ 
+Now analyzing country: Thailand
+Number airports in country: 52
+Possible Outlier: HDY distance to country center: 996.4786598928468 pValue: 0.9707537874257748
+Possible Outlier: PAN distance to country center: 1011.5236229435566 pValue: 0.9740521503604412
+Possible Outlier: NAW distance to country center: 1055.1360952947748 pValue: 0.9819038987060393
+ 
+Now analyzing country: Sierra Leone
+Number airports in country: 10
+ 
+Now analyzing country: France
+Number airports in country: 326
+Possible Outlier: QAI distance to country center: 7537.506967824586 pValue: 1.0
+Possible Outlier: RSY distance to country center: 6698.8900076960235 pValue: 0.9999999999999999
+Possible Outlier: XMU distance to country center: 10208.278020351723 pValue: 1.0
+ 
+Now analyzing country: Japan
+Number airports in country: 133
+Possible Outlier: MMY distance to country center: 1773.2072528233819 pValue: 0.9888048404016101
+Possible Outlier: MUS distance to country center: 2004.8968992733246 pValue: 0.9970565855055346
+Possible Outlier: OGN distance to country center: 1959.2034174771006 pValue: 0.9961075569089552
+Possible Outlier: ISG distance to country center: 1875.9813297047297 pValue: 0.9936543423307006
+Possible Outlier: HTR distance to country center: 1936.0036114664038 pValue: 0.9955276864259953
+Possible Outlier: TRA distance to country center: 1824.1627107112497 pValue: 0.991509571736719
+Possible Outlier: SHI distance to country center: 1780.0366195149747 pValue: 0.9892061306481361
+ 
+Now analyzing country: Greenland
+Number airports in country: 72
+ 
+Now analyzing country: Paraguay
+Number airports in country: 14
+ 
+Now analyzing country: French Polynesia
+Number airports in country: 51
+Possible Outlier: GMR distance to country center: 1618.1022023791918 pValue: 0.9796594974874662
+ 
+Now analyzing country: Guyana
+Number airports in country: 31
+Possible Outlier: PKM distance to country center: 336.46247791772697 pValue: 0.976406585823283
+Possible Outlier: USI distance to country center: 381.0441705119069 pValue: 0.9944450303033443
+ 
+Now analyzing country: Italy
+Number airports in country: 161
+Possible Outlier: QBS distance to country center: 6893.660013096529 pValue: 1.0
+ 
+Now analyzing country: Morocco
+Number airports in country: 25
+Possible Outlier: UAR distance to country center: 874.3449955667631 pValue: 0.9964969945685516
+ 
+Now analyzing country: Oman
+Number airports in country: 21
+ 
+Now analyzing country: Madagascar
+Number airports in country: 68
+Possible Outlier: NKO distance to country center: 9557.958956705435 pValue: 0.9999999869694105
+Possible Outlier: WMP distance to country center: 9890.323001554827 pValue: 0.9999999961281621
+ 
+Now analyzing country: Marshall Islands
+Number airports in country: 36
+Possible Outlier: BII distance to country center: 786.5812460974739 pValue: 0.9718631051130036
+Possible Outlier: ENT distance to country center: 1078.0421990087711 pValue: 0.999302653656481
+ 
+Now analyzing country: Cyprus
+Number airports in country: 9
+ 
+Now analyzing country: Canada
+Number airports in country: 661
+Possible Outlier: YKI distance to country center: 6479.688501087971 pValue: 0.9999999702883037
+Possible Outlier: YQX distance to country center: 3504.5505938230694 pValue: 0.9789933845317212
+Possible Outlier: YSA distance to country center: 3509.169729112806 pValue: 0.9792574078368284
+Possible Outlier: NWP distance to country center: 3644.1959361880968 pValue: 0.9858236955773418
+Possible Outlier: TIL distance to country center: 7545.090668021677 pValue: 0.9999999999836054
+Possible Outlier: YYT distance to country center: 3698.609006807083 pValue: 0.9879120069361663
+Possible Outlier: YZM distance to country center: 3371.118296748401 pValue: 0.9700465990685598
+ 
+Now analyzing country: Peru
+Number airports in country: 45
+Possible Outlier: BLP distance to country center: 1021.8066619463139 pValue: 0.9741873561579178
+Possible Outlier: ILQ distance to country center: 1025.923091236595 pValue: 0.9751907658866167
+Possible Outlier: TCQ distance to country center: 1111.5542393852254 pValue: 0.9897409699859273
+ 
+Now analyzing country: Central African Republic
+Number airports in country: 24
+ 
+Now analyzing country: Djibouti
+Number airports in country: 5
+ 
+Now analyzing country: Cook Islands
+Number airports in country: 9
+ 
+Now analyzing country: Comoros
+Number airports in country: 4
+ 
+Now analyzing country: Niger
+Number airports in country: 6
+ 
+Now analyzing country: Gabon
+Number airports in country: 43
+Possible Outlier: BAW distance to country center: 14984.1866240502 pValue: 0.9999999999230967
+ 
+Now analyzing country: Libya
+Number airports in country: 22
+Possible Outlier: QKO distance to country center: 9185.310205751548 pValue: 0.9998528897108343
+Possible Outlier: WAX distance to country center: 6573.231060365757 pValue: 0.9923798993216586
+ 
+Now analyzing country: New Zealand
+Number airports in country: 65
+Possible Outlier: IVC distance to country center: 808.7141541887157 pValue: 0.9792143411684534
+Possible Outlier: SZS distance to country center: 880.2632906449252 pValue: 0.9917917734689691
+ 
+Now analyzing country: Chile
+Number airports in country: 53
+Possible Outlier: IPC distance to country center: 3693.695734064679 pValue: 0.9999682124623811
+ 
+Now analyzing country: Hong Kong
+Number airports in country: 14
+Possible Outlier: ZTX distance to country center: 266.78761963571014 pValue: 0.9996343237847193
+ 
+Now analyzing country: South Korea
+Number airports in country: 42
+Possible Outlier: XNS distance to country center: 4200.610806425896 pValue: 0.9999999998448451
+ 
+Now analyzing country: Bulgaria
+Number airports in country: 14
+Possible Outlier: VID distance to country center: 256.5587254432573 pValue: 0.9804651096336279
+ 
+Now analyzing country: New Caledonia
+Number airports in country: 16
+ 
+Now analyzing country: Montenegro
+Number airports in country: 8
+Possible Outlier: UZC distance to country center: 135.03092504205893 pValue: 0.9896159624516161
+ 
+Now analyzing country: Kenya
+Number airports in country: 41
+Possible Outlier: LKG distance to country center: 616.7243207281391 pValue: 0.974296299735919
+Possible Outlier: NDE distance to country center: 622.4486836164167 pValue: 0.9766781742273134
+ 
+Now analyzing country: Laos
+Number airports in country: 24
+Possible Outlier: AOU distance to country center: 725.6800779313683 pValue: 0.9837758904330646
+Possible Outlier: KOG distance to country center: 732.0214203237871 pValue: 0.9849484485734589
+ 
+Now analyzing country: Fiji
+Number airports in country: 31
+Possible Outlier: RBI distance to country center: 3516.6383538516275 pValue: 0.9999998879214361
+ 
+Now analyzing country: Syria
+Number airports in country: 11
+ 
+Now analyzing country: Andorra
+Number airports in country: 1
+ 
+Now analyzing country: Mozambique
+Number airports in country: 43
+ 
+Now analyzing country: Netherlands
+Number airports in country: 41
+Possible Outlier: ZYT distance to country center: 143.85270776395825 pValue: 0.971571003697063
+ 
+Now analyzing country: Eritrea
+Number airports in country: 4
+ 
+Now analyzing country: Bahamas
+Number airports in country: 45
+Possible Outlier: NET distance to country center: 1385.3939350941139 pValue: 0.9999994923599683
+Possible Outlier: SWL distance to country center: 734.5320102530281 pValue: 0.9837620598504043
+ 
+Now analyzing country: Congo
+Number airports in country: 25
+Possible Outlier: PNR distance to country center: 1101.8601495231585 pValue: 0.9837830586848009
+Possible Outlier: SOE distance to country center: 1080.4665312059983 pValue: 0.9743278530385587
+ 
+Now analyzing country: Angola
+Number airports in country: 43
+Possible Outlier: NZA distance to country center: 4316.65569550673 pValue: 0.9999999994369106
+ 
+Now analyzing country: Belgium
+Number airports in country: 24
+Possible Outlier: OST distance to country center: 136.79014971870782 pValue: 0.977244413011495
+ 
+Now analyzing country: Austria
+Number airports in country: 30
+Possible Outlier: XWT distance to country center: 2294.2183834078746 pValue: 0.9999998471850366
+ 
+Now analyzing country: Antigua and Barbuda
+Number airports in country: 2
+ 
+Now analyzing country: Malaysia
+Number airports in country: 71
+ 
+Now analyzing country: Bolivia
+Number airports in country: 40
+Possible Outlier: CIJ distance to country center: 808.7214059698432 pValue: 0.9786407882655164
+ 
+Now analyzing country: Cuba
+Number airports in country: 35
+Possible Outlier: SNJ distance to country center: 660.6195782450936 pValue: 0.980781255901938
+ 
+Now analyzing country: Democratic Republic of the Congo
+Number airports in country: 65
+ 
+Now analyzing country: Poland
+Number airports in country: 51
+Possible Outlier: ZMC distance to country center: 387.1558404157294 pValue: 0.9728492088547371
+ 
+Now analyzing country: Ukraine
+Number airports in country: 38
+Possible Outlier: UDJ distance to country center: 654.8178704694939 pValue: 0.9823526597119818
+ 
+Now analyzing country: Maldives
+Number airports in country: 11
+ 
+Now analyzing country: Ireland
+Number airports in country: 21
+ 
+Now analyzing country: Uruguay
+Number airports in country: 19
+ 
+Now analyzing country: East Timor
+Number airports in country: 8
+ 
+Now analyzing country: Vanuatu
+Number airports in country: 32
+Possible Outlier: AUY distance to country center: 618.2118892339009 pValue: 0.9939367787628178
+Possible Outlier: FTA distance to country center: 577.1817750175775 pValue: 0.9876918887535323
+ 
+Now analyzing country: United States Minor Outlying Islands
+Number airports in country: 3
+ 
+Now analyzing country: Anguilla
+Number airports in country: 1
+ 
+Now analyzing country: Tanzania
+Number airports in country: 30
+ 
+Now analyzing country: Burkina Faso
+Number airports in country: 27
+ 
+Now analyzing country: Romania
+Number airports in country: 28
+ 
+Now analyzing country: Turkmenistan
+Number airports in country: 6
+ 
+Now analyzing country: Saint Helena
+Number airports in country: 2
+ 
+Now analyzing country: Ecuador
+Number airports in country: 32
+Possible Outlier: WGL distance to country center: 5157.978201899394 pValue: 0.9987683506135776
+Possible Outlier: WSE distance to country center: 6998.521676967868 pValue: 0.9999904601179757
+ 
+Now analyzing country: Aruba
+Number airports in country: 1
+ 
+Now analyzing country: Mongolia
+Number airports in country: 23
+Possible Outlier: ULG distance to country center: 1057.3183575821415 pValue: 0.9742482293939254
+ 
+Now analyzing country: Nauru
+Number airports in country: 1
+ 
+Now analyzing country: Iraq
+Number airports in country: 17
+Possible Outlier: BSR distance to country center: 488.6389468762261 pValue: 0.9814295362282859
+ 
+Now analyzing country: Bangladesh
+Number airports in country: 15
+ 
+Now analyzing country: Cambodia
+Number airports in country: 15
+ 
+Now analyzing country: Guadeloupe
+Number airports in country: 12
+Possible Outlier: XCJ distance to country center: 266.4462652106794 pValue: 0.9973195747663117
+ 
+Now analyzing country: Zambia
+Number airports in country: 23
+ 
+Now analyzing country: Costa Rica
+Number airports in country: 31
+ 
+Now analyzing country: Macau
+Number airports in country: 4
+ 
+Now analyzing country: Bahrain
+Number airports in country: 3
+ 
+Now analyzing country: Azerbaijan
+Number airports in country: 9
+ 
+Now analyzing country: Botswana
+Number airports in country: 17
+ 
+Now analyzing country: Seychelles
+Number airports in country: 6
+ 
+Now analyzing country: Nepal
+Number airports in country: 44
+Possible Outlier: BDP distance to country center: 439.8415001262898 pValue: 0.9716755021216311
+ 
+Now analyzing country: Afghanistan
+Number airports in country: 34
+ 
+Now analyzing country: Haiti
+Number airports in country: 6
+ 
+Now analyzing country: Uganda
+Number airports in country: 13
+ 
+Now analyzing country: Belize
+Number airports in country: 20
+ 
+Now analyzing country: Bermuda
+Number airports in country: 2
+ 
+Now analyzing country: Lebanon
+Number airports in country: 6
+ 
+Now analyzing country: Cameroon
+Number airports in country: 22
+ 
+Now analyzing country: Portugal
+Number airports in country: 31
+ 
+Now analyzing country: Barbados
+Number airports in country: 1
+ 
+Now analyzing country: Nicaragua
+Number airports in country: 10
+ 
+Now analyzing country: Serbia
+Number airports in country: 9
+ 
+Now analyzing country: Malawi
+Number airports in country: 13
+Possible Outlier: KBQ distance to country center: 3113.2089824318264 pValue: 0.9995199972456202
+ 
+Now analyzing country: Senegal
+Number airports in country: 14
+ 
+Now analyzing country: Benin
+Number airports in country: 6
+ 
+Now analyzing country: Estonia
+Number airports in country: 7
+ 
+Now analyzing country: Vietnam
+Number airports in country: 37
+Possible Outlier: DIN distance to country center: 987.833674010627 pValue: 0.9897963943735134
+Possible Outlier: SQH distance to country center: 907.1620159856241 pValue: 0.9766907496785893
+ 
+Now analyzing country: Guinea Bissau
+Number airports in country: 3
+ 
+Now analyzing country: Saint Vincent and Grenadines
+Number airports in country: 6
+ 
+Now analyzing country: Czech Republic
+Number airports in country: 20
+ 
+Now analyzing country: Gambia
+Number airports in country: 1
+ 
+Now analyzing country: Burundi
+Number airports in country: 3
+ 
+Now analyzing country: Guinea
+Number airports in country: 11
+ 
+Now analyzing country: Mali
+Number airports in country: 13
+ 
+Now analyzing country: Moldova
+Number airports in country: 2
+ 
+Now analyzing country: Rwanda
+Number airports in country: 5
+ 
+Now analyzing country: Brunei Darussalam
+Number airports in country: 2
+ 
+Now analyzing country: Lithuania
+Number airports in country: 7
+ 
+Now analyzing country: Taiwan
+Number airports in country: 24
+Possible Outlier: DSX distance to country center: 548.551696093672 pValue: 0.9998308941727307
+ 
+Now analyzing country: Tajikistan
+Number airports in country: 4
+ 
+Now analyzing country: Equatorial Guinea
+Number airports in country: 4
+ 
+Now analyzing country: Cape Verde
+Number airports in country: 10
+ 
+Now analyzing country: Croatia
+Number airports in country: 9
+Possible Outlier: DBV distance to country center: 374.2375440632683 pValue: 0.9715509600836835
+ 
+Now analyzing country: Bosnia and Herzegovina
+Number airports in country: 4
+ 
+Now analyzing country: Bonaire, Saint Eustatius & Saba
+Number airports in country: 3
+ 
+Now analyzing country: French Guiana
+Number airports in country: 8
+ 
+Now analyzing country: Lesotho
+Number airports in country: 17
+Possible Outlier: THB distance to country center: 150.24720213497636 pValue: 0.9764624628302192
+ 
+Now analyzing country: Liberia
+Number airports in country: 17
+Possible Outlier: CPA distance to country center: 298.19209862911566 pValue: 0.9812566870454059
+ 
+Now analyzing country: Belarus
+Number airports in country: 7
+ 
+Now analyzing country: Slovakia
+Number airports in country: 9
+ 
+Now analyzing country: Togo
+Number airports in country: 2
+ 
+Now analyzing country: Cocos (Keeling) Islands
+Number airports in country: 1
+ 
+Now analyzing country: Hungary
+Number airports in country: 13
+ 
+Now analyzing country: Georgia
+Number airports in country: 5
+ 
+Now analyzing country: Bhutan
+Number airports in country: 5
+ 
+Now analyzing country: Puerto Rico
+Number airports in country: 1
+ 
+Now analyzing country: Latvia
+Number airports in country: 5
+ 
+Now analyzing country: Grenada and South Grenadines
+Number airports in country: 2
+ 
+Now analyzing country: Jamaica
+Number airports in country: 7
+ 
+Now analyzing country: Slovenia
+Number airports in country: 4
+ 
+Now analyzing country: Monaco
+Number airports in country: 2
+ 
+Now analyzing country: Curacao
+Number airports in country: 1
+ 
+Now analyzing country: Cayman Islands
+Number airports in country: 3
+ 
+Now analyzing country: Montserrat
+Number airports in country: 1
+ 
+Now analyzing country: Falkland Islands
+Number airports in country: 2
+ 
+Now analyzing country: Saint Kitts and Nevis
+Number airports in country: 2
+ 
+Now analyzing country: Tonga
+Number airports in country: 6
+ 
+Now analyzing country: British Virgin Islands
+Number airports in country: 6
+ 
+Now analyzing country: Unknown Country
+ 
+Now analyzing country: Palestinian Territory
+Number airports in country: 2
+ 
+Now analyzing country: Malta
+Number airports in country: 3
+ 
+Now analyzing country: Dominica
+Number airports in country: 2
+ 
+Now analyzing country: Tunisia
+Number airports in country: 13
+ 
+Now analyzing country: Kyrgyzstan
+Number airports in country: 2
+ 
+Now analyzing country: Qatar
+Number airports in country: 3
+ 
+Now analyzing country: North Korea
+Number airports in country: 5
+ 
+Now analyzing country: Mayotte
+Number airports in country: 1
+ 
+Now analyzing country: Turks and Caicos Islands
+Number airports in country: 7
+ 
+Now analyzing country: Trinidad and Tobago
+Number airports in country: 2
+ 
+Now analyzing country: Macedonia
+Number airports in country: 4
+ 
+Now analyzing country: Western Sahara
+Number airports in country: 3
+ 
+Now analyzing country: Armenia
+Number airports in country: 2
+ 
+Now analyzing country: Swaziland
+Number airports in country: 3
+ 
+Now analyzing country: Martinique
+Number airports in country: 1
+ 
+Now analyzing country: Liechtenstein
+Number airports in country: 1
+ 
+Now analyzing country: Saint Pierre and Miquelon
+Number airports in country: 2
+ 
+Now analyzing country: Micronesia
+Number airports in country: 5
+ 
+Now analyzing country: Kuwait
+Number airports in country: 3
+ 
+Now analyzing country: Tuvalu
+Number airports in country: 1
+ 
+Now analyzing country: Wallis and Futuna Islands
+Number airports in country: 2
+ 
+Now analyzing country: Gibraltar
+Number airports in country: 1
+ 
+Now analyzing country: Mauritius
+Number airports in country: 2
+ 
+Now analyzing country: Luxembourg
+Number airports in country: 1
+ 
+Now analyzing country: Saint Lucia
+Number airports in country: 2
+ 
+Now analyzing country: Antarctica
+Number airports in country: 2
+ 
+Now analyzing country: Norfolk Island
+Number airports in country: 1
+ 
+Now analyzing country: Niue
+Number airports in country: 1
+ 
+Now analyzing country: Sao Tome and Principe
+Number airports in country: 3
+ 
+Now analyzing country: Singapore
+Number airports in country: 5
+ 
+Now analyzing country: Palau
+Number airports in country: 1
+ 
+Now analyzing country: Reunion
+Number airports in country: 2
+ 
+Now analyzing country: El Salvador
+Number airports in country: 1
+ 
+Now analyzing country: Albania
+Number airports in country: 1
+ 
+Now analyzing country: Sint Maarten
+Number airports in country: 1
+ 
+Now analyzing country: Christmas Island
+Number airports in country: 1

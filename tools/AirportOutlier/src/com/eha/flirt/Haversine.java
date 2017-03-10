@@ -2,6 +2,10 @@ package com.eha.flirt;
 
 public class Haversine {
 	
+    /** 
+     *  Great-circle distance between two points on a sphere
+     */
+
     public static final double R = 6372.8; // In kilometers
     
     public static double haversine(double lat1, double lon1, double lat2, double lon2) {

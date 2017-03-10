@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.bson.Document;
- 
+
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -18,6 +18,15 @@ import com.mongodb.client.MongoDatabase;
 
 public class Run {
 
+	/**
+	 * Main entry point for this tool
+	 * 
+	 * Replace host and database information as required here
+	 * 
+	 * @param args
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
+	 */
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		String 	mongoHost 	= "localhost";
 		int 	mongoPort	= 27017;
@@ -27,7 +36,6 @@ public class Run {
 		List<String> countries = getUniqueCountryList(mongoHost, mongoPort, mongoDb, airportsCol );
 		
 		PrintWriter writer = new PrintWriter("./res/output.txt", "UTF-8");
-		 
 		for(String country : countries) {
 			writer.println(" ");
 			writer.println("Now analyzing country: " + country);
@@ -35,7 +43,6 @@ public class Run {
 			//Our database has a country that is "Unknown Country"
 			if(!country.equals("Unknown Country")) {
 				Coordinates countryCenter = getCountryCenter(country);
-				System.out.println("Approximate country center: " + countryCenter.getLatitude() + ", " + countryCenter.getLongitude() );
 				
 				List<Airport> airports = getAirportsInCountry(mongoHost, mongoPort, mongoDb, airportsCol, country);
 				writer.println("Number airports in country: " + airports.size());
@@ -52,7 +59,7 @@ public class Run {
  
 				// Compute some statistics
 				double mean = stats.getMean();
-				double std = stats.getStandardDeviation();
+				double std 	= stats.getStandardDeviation();
 				
 				//Only remove outliers if relatively normal
 				if(std > 0 && airports.size() > 5) {
@@ -67,9 +74,9 @@ public class Run {
 						double distance = Haversine.haversine(lat1, lon1, lat2, lon2);
 						double pValue = normalDistribution.cumulativeProbability(distance);
 						 
-						//Could tighten up RIGHT HERE. TODO Add sigificance value
+						//Could tighten up RIGHT HERE. TODO Add significance value maybe
 						if( (pValue > 0.97) && distance > mean)  
-						{
+{
 							writer.println("Possible Outlier: " + airport.getId() + " distance to country center: " + distance + " pValue: " + pValue);
 						}
 					}	
@@ -79,8 +86,12 @@ public class Run {
 		writer.close();
 	}	
 	 
-	
-	public static Coordinates getCountryCenter(String country) {
+	/**
+	 * Gets the current center of the country. 
+	 * @param country name
+	 * @return Coordinates of the approximate center of the country
+	 */
+	private static Coordinates getCountryCenter(String country) {
 	
 		Coordinates countryCenter = null;
 		Map<String, Coordinates> countries = CountryUtil.getInstance().getCountries();
@@ -88,7 +99,16 @@ public class Run {
 		return countryCenter;
 	}
 	
-	public static List<Airport> getAirportsInCountry(String mongoHost, int mongoPort, String mongoDb, String collection, String country) {
+	/**
+	 * Checks the mongo database airports collection for all the airports in a country by country name
+	 * @param mongoHost
+	 * @param mongoPort
+	 * @param mongoDb
+	 * @param collection
+	 * @param country
+	 * @return List of airports in the country
+	 */
+	private static List<Airport> getAirportsInCountry(String mongoHost, int mongoPort, String mongoDb, String collection, String country) {
 		
 		List<Airport> airports = new ArrayList<Airport>();	
 		MongoClient mongoClient = new MongoClient( mongoHost , mongoPort );
@@ -115,7 +135,15 @@ public class Run {
 		return airports;
 	}
 	
-	public static List<String> getUniqueCountryList(String mongoHost, int mongoPort, String mongoDb, String collection) {
+	/**
+	 * Get all the unique countries in the database. 
+	 * @param mongoHost
+	 * @param mongoPort
+	 * @param mongoDb
+	 * @param collection
+	 * @return List of unique countries in our database
+	 */
+	private static List<String> getUniqueCountryList(String mongoHost, int mongoPort, String mongoDb, String collection) {
 		
 		List<String> countries = new ArrayList<String>();	
 		MongoClient mongoClient = new MongoClient( mongoHost , mongoPort );

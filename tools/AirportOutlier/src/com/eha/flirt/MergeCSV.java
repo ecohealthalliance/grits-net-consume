@@ -8,8 +8,11 @@ import java.io.IOException;
 
 public class MergeCSV {
 
-	//Util for taking this file: https://developers.google.com/public-data/docs/canonical/countries_csv
-	//And making it into nice easy to consume map
+	/**
+	 * Util for taking this file: 
+		https://developers.google.com/public-data/docs/canonical/countries_csv
+		And making it into nice easy to consume map
+	**/
 	public static void main(String[] args) throws FileNotFoundException {
 
 		File file = new File("./res/countries.txt");

@@ -98,6 +98,7 @@ Some airports are imported with the incorrect location information.  The current
 ```
 python grits_consume.py --type FixAirports tests/data/errorports.csv
 ```
+The errorports.csv file was generated (by Toph) using R to find lat/longs that were outside of the shape file for the country specified in the document.
 
 
 ## Program Options

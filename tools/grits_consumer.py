@@ -1,11 +1,11 @@
 import os
 import argparse
 import logging
-
+import requests
 from tools.grits_file_reader import GritsFileReader
 from tools.grits_provider_type import DiioAirportType, FlightGlobalType
 from tools.grits_mongo import GritsMongoConnection
-
+import csv
 from conf import settings
 
 class MissingRecords(Exception):
@@ -104,27 +104,52 @@ class GritsConsumer(object):
             type=argparse.FileType('rb'),
             help="the file to be parsed")
 
+    def fix_airport_locations(self):
+        mongo_connection = GritsMongoConnection(self.program_args)
+        db = mongo_connection.db
+        # with open(self.program_args.infile, 'r') as csvfile:
+        with self.program_args.infile as csvfile:
+            airports = csv.reader(csvfile)
+            for airport in airports:
+                airportCode = airport[0]
+                current = db.airports.find_one({'_id': airportCode})
+                url =  ("https://api.opencagedata.com/geocode/v1/json?q={0},{1}&pretty=1&key=84d572528e84d94f59e429867dbd1bed").format(current['loc']['coordinates'][1], current['loc']['coordinates'][0]);
+                response = requests.get(url)
+                locationData = response.json()['results'][0]['components']
+                db.airports.update({'_id':airportCode}, {
+                    '$set': {
+                      'city': locationData.get('local_administrative_area') or locationData.get('town') or locationData.get('village') or locationData.get('suburb'),
+                      'country': locationData.get('country_code'),
+                      'countryName': locationData.get('country'),
+                      'stateName': locationData.get('state'),
+                      'globalRegion': None
+                    }
+                })
+
     def run(self, *args):
         """ kickoff the program """
         self.add_args()
         
         if len(args) > 0:
-            program_args = self.parser.parse_args(args)
+            self.program_args = self.parser.parse_args(args)
         else:
-            program_args = self.parser.parse_args()
+            self.program_args = self.parser.parse_args()
                 
         # validate the filename extension
-        if not self.is_valid_file_type(program_args.infile):
+        if not self.is_valid_file_type(self.program_args.infile):
             msg = 'not a valid file extension %r' % settings._ALLOWED_FILE_EXTENSIONS
             self.parser.error(msg) #this calls sys.exit
         # determine the record type from the program_args
-        if program_args.type == 'DiioAirport':
+        if self.program_args.type == 'DiioAirport':
             report_type = DiioAirportType()
+        elif self.program_args.type == 'FixAirports':
+            self.fix_airport_locations()
+            return
         else :
             report_type = FlightGlobalType()
         
         # setup the mongoDB connection
-        mongo_connection = GritsMongoConnection(program_args)
+        mongo_connection = GritsMongoConnection(self.program_args)
         
         # check if the airport import has been run first
         if type(report_type) == FlightGlobalType:
@@ -136,5 +161,7 @@ class GritsConsumer(object):
             db['legs'].delete_many({})
         
         # create a new file reader object of the specified report type
-        reader = GritsFileReader(report_type, program_args)
+        reader = GritsFileReader(report_type, self.program_args)
         reader.process(mongo_connection)
+        if self.program_args.type == 'DiioAirport':
+            self.fix_airport_locations()

@@ -13,7 +13,7 @@ _DATA_DIR = '/data/'
 
 # command-line options
 _ALLOWED_FILE_EXTENSIONS = ['.tsv','.csv']
-_TYPES = ['DiioAirport', 'FlightGlobal']
+_TYPES = ['DiioAirport', 'FlightGlobal', 'FixAirports']
 
 # default strftime format for a records date field
 _STRFTIME_FORMAT = '%b %Y'

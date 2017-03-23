@@ -48,7 +48,7 @@ User defined settings may be set within `conf/settings.py`, which include:
   _DEBUG #boolean, true enables logging.debug messages
   _DATA_DIR #string, location of the FTP downloaded files ex '/data/'
   _ALLOWED_FILE_EXTENSIONS #array, allowed extensions for data files ex. ['.tsv','.csv']
-  _TYPES = #array, types of data files ex. ['DiioAirport', 'FlightGlobal']
+  _TYPES = #array, types of data files ex. ['DiioAirport', 'FlightGlobal', 'FixAirports']
   _STRFTIME_FORMAT #string, default strftime format for a records date field ex. '%b %Y'
   _AIRPORT_COLLECTION_NAME #string, mongodb collection names ex. 'airports'
   _FLIGHT_COLLECTION_NAME #string, mongodb collection names ex. 'flights'
@@ -93,51 +93,58 @@ User defined settings may be set within `conf/settings.py`, which include:
   ``` 
   python grits_ensure_index.py
   ```
+##### Fixing airport locations
+Some airports are imported with the incorrect location information.  The current `DiioAirport` import will fix airports with incorrect locations autoamtically, but existing airport collections can be fixed by running:
+```
+python grits_consume.py --type FixAirports tests/data/errorports.csv
+```
+The errorports.csv file was generated (by Toph) using R to find lat/longs that were outside of the shape file for the country specified in the document.
+
 
 ## Program Options
 
   ```
-	usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]
-	                      [-p PASSWORD] [-d DATABASE] [-m MONGOHOST]
-	                      infile
+  usage: grits_consume.py [-h] [-v] -t {DiioAirport,FlightGlobal} [-u USERNAME]
+                        [-p PASSWORD] [-d DATABASE] [-m MONGOHOST]
+                        infile
 
-	script to parse the grits transportation network data file and populate a
-	mongodb collection.
+  script to parse the grits transportation network data file and populate a
+  mongodb collection.
 
-	positional arguments:
-	  infile                the file to be parsed
+  positional arguments:
+    infile                the file to be parsed
 
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -v, --verbose         verbose output
-	  -t {DiioAirport,FlightGlobal}, --type {DiioAirport,FlightGlobal}
-	                        the type of report to be parsed
-	  -u USERNAME, --username USERNAME
-	                        the username for mongoDB (Default: None)
-	  -p PASSWORD, --password PASSWORD
-	                        the password for mongoDB (Default: None)
-	  -d DATABASE, --database DATABASE
-	                        the database for mongoDB (Default: grits)
-	  -m MONGOHOST, --mongohost MONGOHOST
-	                        the hostname for mongoDB (Default: localhost)
+  optional arguments:
+    -h, --help            show this help message and exit
+    -v, --verbose         verbose output
+    -t {DiioAirport,FlightGlobal,FixAirports}, --type {DiioAirport,FlightGlobal,FixAirports}
+                          the type of report to be parsed
+    -u USERNAME, --username USERNAME
+                          the username for mongoDB (Default: None)
+    -p PASSWORD, --password PASSWORD
+                          the password for mongoDB (Default: None)
+    -d DATABASE, --database DATABASE
+                          the database for mongoDB (Default: grits)
+    -m MONGOHOST, --mongohost MONGOHOST
+                          the hostname for mongoDB (Default: localhost)
   ```
   
   ```
-	usage: grits_ensure_index.py [-h] [-u USERNAME] [-p PASSWORD] [-d DATABASE]
-	                             [-m MONGOHOST]
-	
-	script to set the mongodb indexes for grits transportation network data.
-	
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -u USERNAME, --username USERNAME
-	                        the username for mongoDB (Default: None)
-	  -p PASSWORD, --password PASSWORD
-	                        the password for mongoDB (Default: None)
-	  -d DATABASE, --database DATABASE
-	                        the database for mongoDB (Default: grits)
-	  -m MONGOHOST, --mongohost MONGOHOST
-	                        the hostname for mongoDB (Default: localhost)
+  usage: grits_ensure_index.py [-h] [-u USERNAME] [-p PASSWORD] [-d DATABASE]
+                               [-m MONGOHOST]
+  
+  script to set the mongodb indexes for grits transportation network data.
+  
+  optional arguments:
+    -h, --help            show this help message and exit
+    -u USERNAME, --username USERNAME
+                          the username for mongoDB (Default: None)
+    -p PASSWORD, --password PASSWORD
+                          the password for mongoDB (Default: None)
+    -d DATABASE, --database DATABASE
+                          the database for mongoDB (Default: grits)
+    -m MONGOHOST, --mongohost MONGOHOST
+                          the hostname for mongoDB (Default: localhost)
 
   ```
 

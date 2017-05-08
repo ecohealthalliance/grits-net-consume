@@ -8,7 +8,7 @@ import pymongo
 from datetime import datetime
 from conf import settings
 from tools.grits_mongo import GritsMongoConnection
-
+import boto3
 from grits_ftp_config import url, uname, pwd
 
 def add_args():
@@ -115,6 +115,11 @@ for entry in ls:
       zip_ref = zipfile.ZipFile(filepathname, 'r')
       if len(zip_ref.namelist()) != 1:
         raise IOError("ERROR: More than one file contained in Zip, should just be one CSV file")
+
+      #backup new zip file to S3 bucket
+      s3 = boto3.resource('s3')
+      data = open(filepathname, 'rb')
+      s3.Bucket('eha-flirt').put_object(Key=filename, Body=data)
 
       #Extract the zip, with just one file
       print "Extracting zip file: %s" % zip_ref.namelist()[0]

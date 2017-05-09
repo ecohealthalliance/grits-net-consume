@@ -3,3 +3,4 @@ mongomock
 nose
 cerberus <= 1.0
 git+https://github.com/uqfoundation/pathos.git@master
+boto3

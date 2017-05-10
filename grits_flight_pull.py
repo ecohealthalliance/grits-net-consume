@@ -56,7 +56,7 @@ parser = argparse.ArgumentParser()
 add_args()
 program_args = parser.parse_args(sys.argv)
 
-print "Connecting to Innovata"
+print "Connecting to Innovata", url, uname, pwd
 f = ftplib.FTP()
 f.connect(url)
 f.login(uname, pwd)
